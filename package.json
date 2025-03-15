@@ -1,0 +1,14 @@
+{
+  "name": "type-chess",
+  "version": "0.0.0",
+  "scripts": {
+    "test": "vitest --typecheck"
+  },
+  "keywords": [],
+  "author": "Scott Bedard",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  }
+}
