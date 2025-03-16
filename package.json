@@ -2,13 +2,19 @@
   "name": "type-chess",
   "version": "0.0.0",
   "scripts": {
+    "lint:fix": "eslint . --fix",
+    "lint": "eslint .",
     "test": "vitest --typecheck"
   },
   "keywords": [],
   "author": "Scott Bedard",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.22.0",
+    "@stylistic/eslint-plugin": "^4.2.0",
+    "eslint": "^9.22.0",
     "typescript": "^5.8.2",
+    "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
   }
 }
