@@ -24,3 +24,12 @@ export type IsLength<
   : Acc['length'] extends U
     ? true
     : false
+
+/** Replace substring `U` within string `T` with string `V` */
+export type Replace<
+  T extends string,
+  U extends string,
+  V extends string
+> = T extends `${infer Start}${U}${infer End}`
+  ? `${Start}${V}${End}`
+  : T

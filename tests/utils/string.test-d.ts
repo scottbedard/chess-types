@@ -1,5 +1,5 @@
 import { assertType, test } from 'vitest'
-import type { Includes, Int, IsLength } from '@/utils/string'
+import type { Includes, Int, IsLength, Replace } from '@/utils/string'
 
 test('Includes<T, U>', () => {
   assertType<Includes<'Hello', 'H'>>(true) // <- first
@@ -21,4 +21,9 @@ test('IsLength<T, U>', () => {
   assertType<IsLength<'Hello', 5>>(true) // <- exact
   assertType<IsLength<'Hello', 4>>(false) // <- less
   assertType<IsLength<'Hello', 6>>(false) // <- more
+})
+
+test('Replace<T, U, V>', () => {
+  assertType<Replace<'foobar', 'bar', 'baz'>>('foobaz')
+  assertType<Replace<'foobar', 'hello', 'baz'>>('foobar')
 })
