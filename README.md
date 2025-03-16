@@ -2,28 +2,32 @@
 
 [![Test](https://github.com/scottbedard/type-chess/actions/workflows/test.yml/badge.svg)](https://github.com/scottbedard/type-chess/actions/workflows/test.yml)
 
-A pointless exercise to implement a playable game of chess engine within the Typescript type system.
+A pointless exercise to implement a playable chess engine within the Typescript type system.
 
 Check back later, much later.
 
-### Current progress
+### Current progress...
 
-✅ Fen parsing
+✅ Fen parsing and formatting games
 
 ```ts
-type Board = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
 
 // {
 //   board: 'rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR',
-//   turnColor: 'w',
-//   castlingRights: {
-//     blackKing: true,
-//     blackQueen: true,
-//     whiteKing: true,
-//     whiteQueen: true,
+//   turn: 'w',
+//   castling: {
+//     K: true,
+//     Q: true,
+//     k: true,
+//     q: true,
 //   },
-//   enPassant: '-',
+//   ep: '-',
 //   halfmove: 0,
 //   fullmove: 1,
 // }
+
+type Fen = FormatGame<Game>
+
+// 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 ```

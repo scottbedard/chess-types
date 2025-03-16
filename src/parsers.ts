@@ -19,33 +19,33 @@ export type ParseBoard<
   : IsLength<Acc, 64> extends true ? Acc : never
 
 /** Parse castling rights */
-export type ParseCastlingRights<T extends string> = {
-  blackKing: Includes<T, 'k'>
-  blackQueen: Includes<T, 'q'>
-  whiteKing: Includes<T, 'K'>
-  whiteQueen: Includes<T, 'Q'>
+export type ParseCastling<T extends string> = {
+  K: Includes<T, 'K'>
+  Q: Includes<T, 'Q'>
+  k: Includes<T, 'k'>
+  q: Includes<T, 'q'>
 }
 
 /** Parse fen string */
 export type ParseFen<T extends string, U =
   _ParseFen<T>> = U extends ParsedGame
     ? U['board'] extends never ? never
-    : U['castlingRights'] extends never ? never
-    : U['enPassant'] extends never ? never
+    : U['castling'] extends never ? never
+    : U['ep'] extends never ? never
     : U['halfmove'] extends never ? never
     : U['fullmove'] extends never ? never
-    : U['turnColor'] extends never ? never
+    : U['turn'] extends never ? never
     : U
   : never
 
 export type _ParseFen<T extends string> =
-  T extends `${infer CurrentPosition} ${infer CurrentTurn} ${infer CastlingRights} ${infer EnPassant} ${infer Halfmove} ${infer Fullmove}`
+  T extends `${infer _Board} ${infer _Turn} ${infer _Castling} ${infer _Ep} ${infer Halfmove} ${infer Fullmove}`
     ? {
-      board: ParseBoard<CurrentPosition>
-      enPassant: EnPassant
+      board: ParseBoard<_Board>
+      ep: _Ep
       halfmove: Int<Halfmove>
       fullmove: Int<Fullmove>
-      castlingRights: ParseCastlingRights<CastlingRights>
-      turnColor: CurrentTurn extends Color ? CurrentTurn : never
+      castling: ParseCastling<_Castling>
+      turn: _Turn extends Color ? _Turn : never
     }
   : never

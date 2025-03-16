@@ -5,11 +5,11 @@ export type BlackPiece = 'r' | 'n' | 'b' | 'q' | 'k' | 'p'
 export type WhitePiece = 'R' | 'N' | 'B' | 'Q' | 'K' | 'P'
 
 /** Castling rights by color */
-export type CastlingRights = {
-  blackKing: boolean
-  blackQueen: boolean
-  whiteKing: boolean
-  whiteQueen: boolean
+export type Castling = {
+  K: boolean
+  Q: boolean
+  k: boolean
+  q: boolean
 }
 
 /** Black or white */
@@ -18,9 +18,9 @@ export type Color = 'b' | 'w'
 /** Parsed game state */
 export type ParsedGame = {
   board: string
-  turnColor: Color
-  castlingRights: CastlingRights
-  enPassant: string
+  turn: Color
+  castling: Castling
+  ep: string
   halfmove: number
   fullmove: number
 }

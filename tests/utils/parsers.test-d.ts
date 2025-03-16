@@ -1,5 +1,5 @@
 import { assertType, describe, test } from 'vitest'
-import type { ParseBoard, ParseCastlingRights, ParseFen } from '@/parsers'
+import type { ParseBoard, ParseCastling, ParseFen } from '@/parsers'
 
 describe('ParseBoard<T>', () => {
   test('success', () => {
@@ -29,14 +29,27 @@ describe('ParseBoard<T>', () => {
   })
 })
 
-test('ParseCastlingRights<T>', () => {
-  type Result = ParseCastlingRights<'Kq'>
+describe('ParseCastling<T>', () => {
+  test('Kq', () => {
+    type Result = ParseCastling<'Kq'>
 
-  assertType<Result>({
-    blackKing: false,
-    blackQueen: true,
-    whiteKing: true,
-    whiteQueen: false,
+    assertType<Result>({
+      k: false,
+      q: true,
+      K: true,
+      Q: false,
+    })
+  })
+
+  test('-', () => {
+    type Result = ParseCastling<'-'>
+
+    assertType<Result>({
+      K: false,
+      Q: false,
+      k: false,
+      q: false,
+    })
   })
 })
 
@@ -46,14 +59,14 @@ describe('ParseFen<T>', () => {
 
     assertType<Result>({
       board: 'rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR',
-      turnColor: 'w',
-      castlingRights: {
-        blackKing: true,
-        blackQueen: true,
-        whiteKing: true,
-        whiteQueen: true,
+      turn: 'w',
+      castling: {
+        k: true,
+        q: true,
+        K: true,
+        Q: true,
       },
-      enPassant: '-',
+      ep: '-',
       halfmove: 0,
       fullmove: 1,
     })
