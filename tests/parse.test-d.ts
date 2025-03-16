@@ -7,9 +7,14 @@ test('Parse', () => {
   assertType<Result>({
     board: "rnbqkbnr_pppppppp_____________________________________PPPPPPPP_RNBQKBNR",
     enPassant: "-",
-    halfmove: "0",
-    fullmove: "1",
-    castlingRights: "KQkq",
+    halfmove: 0,
+    fullmove: 1,
+    castlingRights: {
+      blackKing: true,
+      blackQueen: true,
+      whiteKing: true,
+      whiteQueen: true,
+    },
     currentTurn: "w",
   })
 })

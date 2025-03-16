@@ -12,6 +12,7 @@ export default tseslint.config(
     },
     rules: {
       '@stylistic/eol-last': ['error', 'always'],
+      '@typescript-eslint/no-unused-vars': ['error', { 'varsIgnorePattern': '^_' }]
     }
   }
 )
