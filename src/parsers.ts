@@ -1,22 +1,22 @@
-import type { Includes, Int, IsLength } from './utils/string'
+import type { Includes, Int } from './utils/string'
 import type { Color, ParsedGame, Piece } from './chess'
 
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<
   T extends string,
-  Acc extends string = '',
+  Acc extends (string | '_')[] = []
 > = T extends `${infer Head}${infer Rest}`
-  ? Head extends '/' ? ParseBoard<Rest, Acc> :
-    Head extends '1' ? ParseBoard<Rest, `${Acc}${'_'}`> :
-    Head extends '2' ? ParseBoard<Rest, `${Acc}${'__'}`> :
-    Head extends '3' ? ParseBoard<Rest, `${Acc}${'___'}`> :
-    Head extends '4' ? ParseBoard<Rest, `${Acc}${'____'}`> :
-    Head extends '5' ? ParseBoard<Rest, `${Acc}${'_____'}`> :
-    Head extends '6' ? ParseBoard<Rest, `${Acc}${'______'}`> :
-    Head extends '7' ? ParseBoard<Rest, `${Acc}${'_______'}`> :
-    Head extends '8' ? ParseBoard<Rest, `${Acc}${'________'}`> :
-    Head extends Piece ? ParseBoard<Rest, `${Acc}${Head}`> : never
-  : IsLength<Acc, 64> extends true ? Acc : never
+  ? Head extends '/' ? ParseBoard<Rest, [...Acc]> :
+    Head extends '1' ? ParseBoard<Rest, [...Acc, '_']> :
+    Head extends '2' ? ParseBoard<Rest, [...Acc, '_', '_']> :
+    Head extends '3' ? ParseBoard<Rest, [...Acc, '_', '_', '_']> :
+    Head extends '4' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_']> :
+    Head extends '5' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_']> :
+    Head extends '6' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_', '_']> :
+    Head extends '7' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_', '_', '_']> :
+    Head extends '8' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_', '_', '_', '_']> :
+    Head extends Piece ? ParseBoard<Rest, [...Acc, Head]> : never
+  : Acc['length'] extends 64 ? Acc : never
 
 /** Parse castling rights */
 export type ParseCastling<T extends string> = {

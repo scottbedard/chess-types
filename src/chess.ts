@@ -17,7 +17,16 @@ export type Color = 'b' | 'w'
 
 /** Parsed game state */
 export type ParsedGame = {
-  board: string
+  board: [
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+    MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece, MaybePiece,
+  ]
   turn: Color
   castling: Castling
   ep: string
@@ -27,3 +36,6 @@ export type ParsedGame = {
 
 /** All pieces */
 export type Piece = BlackPiece | WhitePiece
+
+/** Possible value at a position */
+export type MaybePiece = Piece | '_'

@@ -5,7 +5,16 @@ describe('ParseBoard<T>', () => {
   test('success', () => {
     type Result = ParseBoard<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'>
 
-    assertType<Result>('rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR')
+    assertType<Result>([
+      'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r',
+      'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
+      '_', '_', '_', '_', '_', '_', '_', '_',
+      '_', '_', '_', '_', '_', '_', '_', '_',
+      '_', '_', '_', '_', '_', '_', '_', '_',
+      '_', '_', '_', '_', '_', '_', '_', '_',
+      'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
+      'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
+    ])
   })
 
   test('fail, invalid characters', () => {
@@ -58,7 +67,16 @@ describe('ParseFen<T>', () => {
     type Result = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
 
     assertType<Result>({
-      board: 'rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR',
+      board: [
+        'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r',
+        'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
+        '_', '_', '_', '_', '_', '_', '_', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_',
+        '_', '_', '_', '_', '_', '_', '_', '_',
+        'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
+        'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
+      ],
       turn: 'w',
       castling: {
         k: true,
