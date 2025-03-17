@@ -4,14 +4,6 @@ export type Includes<T extends string, U extends string> =
     ? true
     : false
 
-/** Explode string into tuple */
-export type Explode<
-  T extends string,
-  Acc extends string[] = []
-> = T extends `${infer Head}${infer Rest}`
-  ? Explode<Rest, [...Acc, Head]>
-  : Acc
-
 /** Convert positive string integer `T` to `number` */
 export type Int<T extends string> =
   `${T}` extends `-${string}` | `${string}.${string}`
