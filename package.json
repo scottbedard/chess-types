@@ -1,5 +1,5 @@
 {
-  "name": "type-chess",
+  "name": "@bedard/chess.d.ts",
   "version": "0.0.0",
   "scripts": {
     "lint:fix": "eslint . --fix",

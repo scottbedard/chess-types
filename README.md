@@ -1,4 +1,4 @@
-# `@bedard/type-chess`
+# `@bedard/chess.d.ts`
 
 [![Test](https://github.com/scottbedard/type-chess/actions/workflows/test.yml/badge.svg)](https://github.com/scottbedard/type-chess/actions/workflows/test.yml)
 
