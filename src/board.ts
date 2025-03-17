@@ -1,3 +1,4 @@
+import type { Color, FriendlyPiece, ParsedGame } from './chess'
 /* eslint-disable @stylistic/no-multi-spaces */
 
 /** Graph indices */
@@ -10,6 +11,14 @@ type GraphIndex =
   | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47
   | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55
   | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63
+
+/** Map position indices to their positions */
+export type MapPositions<
+  T extends GraphIndex[],
+  Acc extends Positions[GraphIndex][] = []
+> = T extends [infer U extends GraphIndex, ...infer V extends GraphIndex[]]
+  ? MapPositions<V, [...Acc, Positions[U]]>
+  : Acc
 
 /** Tuple of positions by FEN index */
 type Positions = [
@@ -24,10 +33,10 @@ type Positions = [
 ]
 
 /** String union of position names */
-type Position = Positions[GraphIndex]
+export type Position<T extends GraphIndex> = Positions[T]
 
 /** Position indices within the graph */
-type PositionIndex = {
+export type Index = {
   a8: 0, b8: 1, c8: 2, d8: 3, e8: 4, f8: 5, g8: 6, h8: 7,
   a7: 8, b7: 9, c7: 10, d7: 11, e7: 12, f7: 13, g7: 14, h7: 15,
   a6: 16, b6: 17, c6: 18, d6: 19, e6: 20, f6: 21, g6: 22, h6: 23,
@@ -114,7 +123,35 @@ type Graph = [
 
 /** Step along the graph in a given direction */
 export type Step<
-  From extends Position,
+  From extends Positions[GraphIndex],
   Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-  U = Graph[PositionIndex[From]][Direction]
+  U = Graph[Index[From]][Direction]
 > = U extends GraphIndex ? Positions[U] : never
+
+export type _Step<
+  From extends GraphIndex,
+  Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
+  U = Graph[From][Direction]
+> = U extends GraphIndex ? U : never
+
+/** Walk along the graph, stopping short of friendly pieces */
+export type Walk<
+  Game extends ParsedGame,
+  Friendly extends Color,
+  From extends Positions[GraphIndex],
+  Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
+  Path = _Walk<Game, Friendly, Index[From], Direction>
+> = Path extends GraphIndex[] ? MapPositions<Path> : never
+
+export type _Walk<
+  Game extends ParsedGame,
+  Friendly extends Color,
+  From extends GraphIndex,
+  Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
+  Acc extends GraphIndex[] = [],
+  To extends GraphIndex = _Step<From, Direction>
+> = Game['board'][To] extends '_'
+  ? _Walk<Game, Friendly, To, Direction, [...Acc, To]>
+  : Game['board'][To] extends FriendlyPiece<Friendly>
+    ? Acc
+    : [...Acc, To] // @todo, handle end o board

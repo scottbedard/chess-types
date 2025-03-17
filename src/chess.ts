@@ -15,6 +15,9 @@ export type Castling = {
 /** Black or white */
 export type Color = 'b' | 'w'
 
+/** Friendly pieces */
+export type FriendlyPiece<T extends Color> = T extends 'b' ? BlackPiece : WhitePiece
+
 /** Parsed game state */
 export type ParsedGame = {
   board: [
