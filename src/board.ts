@@ -1,26 +1,7 @@
 import type { Color, FriendlyPiece, ParsedGame } from './chess'
 /* eslint-disable @stylistic/no-multi-spaces */
 
-/** Graph indices */
-type GraphIndex =
-  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
-  |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
-  | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
-  | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31
-  | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39
-  | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47
-  | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55
-  | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63
-
-/** Map position indices to their positions */
-export type MapPositions<
-  T extends GraphIndex[],
-  Acc extends Positions[GraphIndex][] = []
-> = T extends [infer U extends GraphIndex, ...infer V extends GraphIndex[]]
-  ? MapPositions<V, [...Acc, Positions[U]]>
-  : Acc
-
-/** Tuple of positions by FEN index */
+/** Sorted list of positions by FEN index */
 type Positions = [
   'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
   'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7',
@@ -32,13 +13,21 @@ type Positions = [
   'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1',
 ]
 
-/** String union of position names */
-export type Position<T extends GraphIndex> = Positions[T]
+/** Union of all possible fen indices */
+type PositionIndex =
+  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
+  |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
+  | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
+  | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31
+  | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39
+  | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47
+  | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55
+  | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63
 
-/** Position indices within the graph */
-export type Index = {
-  a8: 0, b8: 1, c8: 2, d8: 3, e8: 4, f8: 5, g8: 6, h8: 7,
-  a7: 8, b7: 9, c7: 10, d7: 11, e7: 12, f7: 13, g7: 14, h7: 15,
+/** Lookup table to get a position's fen index */
+export type PositionSet = {
+  a8: 0,  b8: 1,  c8: 2,  d8: 3,  e8: 4,  f8: 5,  g8: 6,  h8: 7,
+  a7: 8,  b7: 9,  c7: 10, d7: 11, e7: 12, f7: 13, g7: 14, h7: 15,
   a6: 16, b6: 17, c6: 18, d6: 19, e6: 20, f6: 21, g6: 22, h6: 23,
   a5: 24, b5: 25, c5: 26, d5: 27, e5: 28, f5: 29, g5: 30, h5: 31,
   a4: 32, b4: 33, c4: 34, d4: 35, e4: 36, f4: 37, g4: 38, h4: 39,
@@ -123,35 +112,47 @@ type Graph = [
 
 /** Step along the graph in a given direction */
 export type Step<
-  From extends Positions[GraphIndex],
+  From extends Positions[PositionIndex],
   Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-  U = Graph[Index[From]][Direction]
-> = U extends GraphIndex ? Positions[U] : never
+  U = Graph[PositionSet[From]][Direction]
+> = U extends PositionIndex
+  ? Positions[U]
+  : never
 
 export type _Step<
-  From extends GraphIndex,
+  From extends PositionIndex,
   Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-  U = Graph[From][Direction]
-> = U extends GraphIndex ? U : never
+> = Graph[From][Direction]
+
+type _StepPositions<
+  T extends PositionIndex[],
+  Acc extends Positions[PositionIndex][] = []
+> = T extends [infer U extends PositionIndex, ...infer V extends PositionIndex[]]
+  ? _StepPositions<V, [...Acc, Positions[U]]>
+  : Acc
 
 /** Walk along the graph, stopping short of friendly pieces */
 export type Walk<
   Game extends ParsedGame,
   Friendly extends Color,
-  From extends Positions[GraphIndex],
+  From extends Positions[PositionIndex],
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
-  Path = _Walk<Game, Friendly, Index[From], Direction>
-> = Path extends GraphIndex[] ? MapPositions<Path> : never
+  Path = _Walk<Game, Friendly, PositionSet[From], Direction>
+> = Path extends PositionIndex[]
+  ? _StepPositions<Path>
+  : never
 
 export type _Walk<
   Game extends ParsedGame,
   Friendly extends Color,
-  From extends GraphIndex,
+  From extends PositionIndex,
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
-  Acc extends GraphIndex[] = [],
-  To extends GraphIndex = _Step<From, Direction>
-> = Game['board'][To] extends '_'
-  ? _Walk<Game, Friendly, To, Direction, [...Acc, To]>
-  : Game['board'][To] extends FriendlyPiece<Friendly>
-    ? Acc
-    : [...Acc, To] // @todo, handle end o board
+  Acc extends PositionIndex[] = [],
+  To = _Step<From, Direction>
+> = To extends PositionIndex
+  ? Game['board'][To] extends '_'
+    ? _Walk<Game, Friendly, To, Direction, [...Acc, To]>
+    : Game['board'][To] extends FriendlyPiece<Friendly>
+      ? Acc
+      : [...Acc, To]
+  : Acc

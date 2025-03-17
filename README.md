@@ -41,7 +41,7 @@ type Fen = FormatGame<Game>
 // 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 ```
 
-✅ Walking along the board in a given direction, capturing enemy pieces and stopping short of friendly ones
+✅ Straight-line board traversal, capturing enemy pieces and stopping short of friendly ones
 
 ```ts
 type Game = ParseFen<'7Q/8/8/8/8/8/8/8 w - - 0 1'>

@@ -1,8 +1,20 @@
+/** Black or white */
+export type Color = 'b' | 'w'
+
 /** Black pieces */
 export type BlackPiece = 'r' | 'n' | 'b' | 'q' | 'k' | 'p'
 
 /** White pieces */
 export type WhitePiece = 'R' | 'N' | 'B' | 'Q' | 'K' | 'P'
+
+/** All pieces */
+export type Piece = BlackPiece | WhitePiece
+
+/** Possible value at a position */
+export type MaybePiece = Piece | '_'
+
+/** Friendly pieces */
+export type FriendlyPiece<T extends Color> = T extends 'b' ? BlackPiece : WhitePiece
 
 /** Castling rights by color */
 export type Castling = {
@@ -11,12 +23,6 @@ export type Castling = {
   k: boolean
   q: boolean
 }
-
-/** Black or white */
-export type Color = 'b' | 'w'
-
-/** Friendly pieces */
-export type FriendlyPiece<T extends Color> = T extends 'b' ? BlackPiece : WhitePiece
 
 /** Parsed game state */
 export type ParsedGame = {
@@ -36,9 +42,3 @@ export type ParsedGame = {
   halfmove: number
   fullmove: number
 }
-
-/** All pieces */
-export type Piece = BlackPiece | WhitePiece
-
-/** Possible value at a position */
-export type MaybePiece = Piece | '_'

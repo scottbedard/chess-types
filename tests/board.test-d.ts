@@ -28,22 +28,32 @@ describe('Step<From, Direction>', () => {
   })
 })
 
-describe('Walk<From, Direction>', () => {
-  test('north until friendly', () => {
+describe('Walk<Game, Color, From, Direction>', () => {
+  test('north until friendly piece', () => {
     type Game = ParseFen<'8/3Q4/8/8/8/8/3Q4/8 w - - 0 1'>
+    type Result = Walk<Game, 'w', 'd2', 1>
 
-    assertType<Walk<Game, 'w', 'd2', 1>>(['d3', 'd4', 'd5', 'd6'])
+    assertType<Result>(['d3', 'd4', 'd5', 'd6'])
   })
 
-  test('northeast until hostile', () => {
+  test('north east until hostile piece', () => {
     type Game = ParseFen<'7Q/8/8/8/8/8/8/8 w - - 0 1'>
+    type Result = Walk<Game, 'b', 'a1', 2>
 
-    assertType<Walk<Game, 'b', 'a1', 2>>(['b2', 'c3', 'd4', 'e5', 'f6', 'g7', 'h8'])
+    assertType<Result>(['b2', 'c3', 'd4', 'e5', 'f6', 'g7', 'h8'])
   })
 
-  test.skip('east until edge of board', () => {
-    // type Game = ParseFen<'8/8/8/8/Q7/8/8/8 w - - 0 1'>
+  test('south west until edge of board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w - - 0 1'>
+    type Result = Walk<Game, 'w', 'f8', 6>
 
-    // assertType<Walk<Game, 'b', 'a4', 5>>(['b4', 'c4', 'd4', 'e4', 'f4', 'g4', 'h4'])
+    assertType<Result>(['e7', 'd6', 'c5', 'b4', 'a3'])
+  })
+
+  test('north west until edge of board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w - - 0 1'>
+    type Result = Walk<Game, 'b', 'h1', 0>
+
+    assertType<Result>(['g2', 'f3', 'e4', 'd5', 'c6', 'b7', 'a8'])
   })
 })
