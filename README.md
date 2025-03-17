@@ -39,3 +39,12 @@ type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
 type Fen = FormatGame<Game>
 
 // 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+```
+
+✅ Walking along the board in a given direction, capturing enemy pieces and stopping short of friendly ones
+
+```ts
+type Game = ParseFen<'7Q/8/8/8/8/8/8/8 w - - 0 1'>
+
+type Path = Walk<Game, 'b', 'a1', 2> // ['b2', 'c3', 'd4', 'e5', 'f6', 'g7', 'h8']
+```
