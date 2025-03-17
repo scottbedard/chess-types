@@ -14,7 +14,16 @@ Check back later, much later.
 type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
 
 // {
-//   board: 'rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR',
+//   board: [
+//     'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r',
+//     'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
+//     '_', '_', '_', '_', '_', '_', '_', '_',
+//     '_', '_', '_', '_', '_', '_', '_', '_',
+//     '_', '_', '_', '_', '_', '_', '_', '_',
+//     '_', '_', '_', '_', '_', '_', '_', '_',
+//     'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
+//     'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
+//   ],
 //   turn: 'w',
 //   castling: {
 //     K: true,
@@ -30,4 +39,3 @@ type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
 type Fen = FormatGame<Game>
 
 // 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
-```
