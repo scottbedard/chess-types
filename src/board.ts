@@ -1,7 +1,18 @@
 import type { Color, FriendlyPiece, ParsedGame } from './chess'
 /* eslint-disable @stylistic/no-multi-spaces */
 
-/** Sorted list of positions by FEN index */
+/** Union of all possible fen indices */
+type Index =
+  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
+  |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
+  | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
+  | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31
+  | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39
+  | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47
+  | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55
+  | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63
+
+/** Sorted list of positions by fen index */
 type Positions = [
   'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
   'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7',
@@ -12,17 +23,6 @@ type Positions = [
   'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2',
   'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1',
 ]
-
-/** Union of all possible fen indices */
-type PositionIndex =
-  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
-  |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
-  | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
-  | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31
-  | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39
-  | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47
-  | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55
-  | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63
 
 /** Lookup table to get a position's fen index */
 export type PositionSet = {
@@ -37,11 +37,24 @@ export type PositionSet = {
 }
 
 /**
- * This type represents positions and their relation to one another.
+ * The graph represents the positions of a chessboard and their relationship to
+ * one another. Each index coorelates to a position on the board, and each child
+ * value represents the index of a neighboring position relative to a 3x3 grid,
+ * with the original position at the center. -1 represents off the board.
  *
- * Imagine positions at the center of a 3x3 grid, with neighboring values
- * containing the index of adjacent positions. -1 indicates that the position
- * is off the board.
+ * For example, to find the position directly above d4...
+ *
+ * [
+ *   ...
+ *   //     d4 is located at index 35, so skip to that row in the graph and
+ *   //     take the 2nd value from that 3x3 matrix
+ *   [      ↓
+ *     26, 27, 28,
+ *     34, 35, 36,
+ *     42, 43, 44
+ *   ]
+ * ]
+ *
  */
 type Graph = [
   [-1, -1, -1, -1,  0,  1, -1,  8,  9],
@@ -112,22 +125,17 @@ type Graph = [
 
 /** Step along the graph in a given direction */
 export type Step<
-  From extends Positions[PositionIndex],
+  From extends Positions[Index],
   Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
   U = Graph[PositionSet[From]][Direction]
-> = U extends PositionIndex
+> = U extends Index
   ? Positions[U]
   : never
 
-export type _Step<
-  From extends PositionIndex,
-  Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-> = Graph[From][Direction]
-
 type _StepPositions<
-  T extends PositionIndex[],
-  Acc extends Positions[PositionIndex][] = []
-> = T extends [infer U extends PositionIndex, ...infer V extends PositionIndex[]]
+  T extends Index[],
+  Acc extends Positions[Index][] = []
+> = T extends [infer U extends Index, ...infer V extends Index[]]
   ? _StepPositions<V, [...Acc, Positions[U]]>
   : Acc
 
@@ -135,21 +143,21 @@ type _StepPositions<
 export type Walk<
   Game extends ParsedGame,
   Friendly extends Color,
-  From extends Positions[PositionIndex],
+  From extends Positions[Index],
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
   Path = _Walk<Game, Friendly, PositionSet[From], Direction>
-> = Path extends PositionIndex[]
+> = Path extends Index[]
   ? _StepPositions<Path>
   : never
 
 export type _Walk<
   Game extends ParsedGame,
   Friendly extends Color,
-  From extends PositionIndex,
+  From extends Index,
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
-  Acc extends PositionIndex[] = [],
-  To = _Step<From, Direction>
-> = To extends PositionIndex
+  Acc extends Index[] = [],
+  To = Graph[From][Direction]
+> = To extends Index
   ? Game['board'][To] extends '_'
     ? _Walk<Game, Friendly, To, Direction, [...Acc, To]>
     : Game['board'][To] extends FriendlyPiece<Friendly>
