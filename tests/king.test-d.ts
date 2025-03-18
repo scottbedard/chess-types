@@ -23,4 +23,76 @@ describe('KingMoves<Game, Color, From>', () => {
       'h4g5', 'h4h5', 'h4g4', 'h4g3', 'h4h3'
     ])
   })
+
+  test('white castle short', () => {
+    // ...
+  })
+
+  test('white castle short blocked 1', () => {
+    // ...
+  })
+
+  test('white castle short blocked 2', () => {
+    // ...
+  })
+
+  test('white castle short without rights', () => {
+    // ...
+  })
+
+  test('white castle long', () => {
+    // ...
+  })
+
+  test('white castle long blocked 1', () => {
+    // ...
+  })
+
+  test('white castle long blocked 2', () => {
+    // ...
+  })
+
+  test('white castle long blocked 3', () => {
+    // ...
+  })
+
+  test('white castle long without rights', () => {
+    // ...
+  })
+
+  test('black castle short', () => {
+    // ...
+  })
+
+  test('black castle short blocked 1', () => {
+    // ...
+  })
+
+  test('black castle short blocked 2', () => {
+    // ...
+  })
+
+  test('black castle short without rights', () => {
+    // ...
+  })
+
+  test('black castle long', () => {
+    // ...
+  })
+
+  test('black castle long blocked 1', () => {
+    // ...
+  })
+
+  test('black castle long blocked 2', () => {
+    // ...
+  })
+
+  test('black castle long blocked 3', () => {
+    // ...
+  })
+
+  test('black castle long without rights', () => {
+    // ...
+  })
 })
