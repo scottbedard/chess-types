@@ -53,3 +53,10 @@ export type ParsedGame = {
   halfmove: number
   fullmove: number
 }
+
+/** Parsed move */
+export type ParsedMove = {
+  from: Index
+  to: Index
+  promotion: PromotionPiece | null
+}

@@ -1,5 +1,6 @@
 import { assertType, describe, test } from 'vitest'
-import type { FormatGame, FormatCastling } from '@/formatters'
+import { PositionIndex } from '@/board'
+import type { FormatGame, FormatCastling, FormatSan } from '@/formatters'
 
 describe('FormatGame<T>', () => {
   test('initial position', () => {
@@ -44,5 +45,27 @@ describe('FormatCastling<T>', () => {
     type Result = FormatCastling<{ K: true, Q: false, k: true, q: false }>
 
     assertType<Result>('Kk')
+  })
+})
+
+describe('FormatSan<T>', () => {
+  test('a7a8Q', () => {
+    type Result = FormatSan<{
+      from: PositionIndex['a7'],
+      to: PositionIndex['a8'],
+      promotion: 'Q'
+    }>
+
+    assertType<Result>('a7a8Q')
+  })
+
+  test('f5f6', () => {
+    type Result = FormatSan<{
+      from: PositionIndex['f5'],
+      to: PositionIndex['f6'],
+      promotion: null
+    }>
+
+    assertType<Result>('f5f6')
   })
 })
