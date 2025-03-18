@@ -14,13 +14,37 @@ describe('PawnMoves<Game, Color, From>', () => {
     ])
   })
 
-  // white advnace forward blocked friendly
+  test('white advance forward blocked friendly', () => {
+    type Game = ParseFen<'8/8/8/8/8/3P4/3P4/8 w - - 0 1'>
 
-  // white advance forward blocked enemy
+    type Result = ToPositions<PawnMoves<Game, 'w', Position['d2']>>
 
-  // white advance forward two blocked friendly
+    assertType<Result>([])
+  })
 
-  // white advance forward two blocked enemy
+  test('white advance forward blocked enemy', () => {
+    type Game = ParseFen<'8/8/8/8/8/3p4/3P4/8 w - - 0 1'>
+
+    type Result = ToPositions<PawnMoves<Game, 'w', Position['d2']>>
+
+    assertType<Result>([])
+  })
+
+  test('white second advance two blocked friendly', () => {
+    type Game = ParseFen<'8/8/8/8/3P4/8/3P4/8 w - - 0 1'>
+
+    type Result = ToPositions<PawnMoves<Game, 'w', Position['d2']>>
+
+    assertType<Result>(['d3'])
+  })
+
+  test('white second advance two blocked enemy', () => {
+    type Game = ParseFen<'8/8/8/8/3p4/8/3P4/8 w - - 0 1'>
+
+    type Result = ToPositions<PawnMoves<Game, 'w', Position['d2']>>
+
+    assertType<Result>(['d3'])
+  })
 
   // white capture portside
 
