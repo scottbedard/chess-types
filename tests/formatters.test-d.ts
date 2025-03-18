@@ -1,5 +1,5 @@
 import { assertType, describe, test } from 'vitest'
-import { PositionIndex } from '@/board'
+import { PositionIndex } from '@/base'
 import type { FormatGame, FormatCastling, FormatSan } from '@/formatters'
 
 describe('FormatGame<T>', () => {

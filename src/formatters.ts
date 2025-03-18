@@ -1,6 +1,13 @@
-import type { Castling, ParsedMove, Piece, PromotionPiece } from './chess'
-import type { IsLength } from './utils/string'
-import type { Position, Positions } from './board'
+import type {
+  Castling,
+  ParsedMove,
+  Piece,
+  Position,
+  Positions,
+  PromotionPiece,
+} from '@/base'
+
+import type { IsLength } from '@/utils'
 
 /** format board to fen notation */
 export type FormatGame<T extends string> =

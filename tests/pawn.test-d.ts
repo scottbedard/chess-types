@@ -1,7 +1,7 @@
 import { assertType, describe, test } from 'vitest'
 import type { ParseFen } from '@/parsers'
 import type { PawnMoves } from '@/pieces/pawn'
-import type { PositionIndex } from '@/board'
+import type { PositionIndex } from '@/base'
 import type { ToSans } from '@/formatters'
 
 describe('PawnMoves<Game, Color, From>', () => {

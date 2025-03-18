@@ -1,3 +1,8 @@
+import type {
+  Index,
+  Positions,
+} from '@/base'
+
 /** Test if string `T` includes string `U` */
 export type Includes<T extends string, U extends string> =
   T extends `${string}${U}${string}`
@@ -24,3 +29,20 @@ export type IsLength<
   : Acc['length'] extends U
     ? true
     : false
+
+/** Map a tuple of indices to san notation */
+export type ToMoves<
+  T extends Index[],
+  From extends Index,
+  Acc extends unknown[] = []
+> = T extends [infer To extends Index, ...infer Tail extends Index[]]
+  ? ToMoves<Tail, From, [...Acc, { from: From, to: To, promotion: null }]>
+  : Acc
+
+/** Map indices to their named position */
+export type ToPositions<
+  T extends Index[],
+  Acc extends Positions[Index][] = []
+> = T extends [infer U extends Index, ...infer V extends Index[]]
+  ? ToPositions<V, [...Acc, Positions[U]]>
+  : Acc

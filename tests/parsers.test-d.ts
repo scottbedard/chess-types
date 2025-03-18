@@ -1,5 +1,5 @@
 import { assertType, describe, test } from 'vitest'
-import { PositionIndex } from '@/board'
+import { PositionIndex } from '@/base'
 import type { ParseBoard, ParseCastling, ParseFen, ParseSan } from '@/parsers'
 
 describe('ParseBoard<T>', () => {

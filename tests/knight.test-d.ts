@@ -1,7 +1,7 @@
 import { assertType, describe, test } from 'vitest'
 import type { KnightMoves } from '@/pieces/knight'
 import type { ParseFen } from '@/parsers'
-import type { PositionIndex } from '@/board'
+import type { PositionIndex } from '@/base'
 import { ToSans } from '@/formatters'
 
 describe('KnightMoves<Game, Color, From>', () => {

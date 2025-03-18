@@ -1,6 +1,6 @@
 import { assertType, describe, test } from 'vitest'
 import type { ParseFen } from '@/parsers'
-import type { Step, Walk } from '@/board'
+import type { Step, Walk } from '@/base'
 
 describe('Step<From, Direction>', () => {
   test('a1', () => {

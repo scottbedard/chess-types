@@ -1,6 +1,17 @@
-import { PositionIndex } from './board'
-import type { Color, File, ParsedGame, Piece, PromotionPiece, Rank } from './chess'
-import type { Includes, Int } from './utils/string'
+import type {
+  Color,
+  File,
+  ParsedGame,
+  Piece,
+  PositionIndex,
+  PromotionPiece,
+  Rank,
+} from '@/base'
+
+import type {
+  Includes,
+  Int,
+} from '@/utils'
 
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<

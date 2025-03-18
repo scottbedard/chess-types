@@ -1,5 +1,5 @@
 import { assertType, test } from 'vitest'
-import type { Includes, Int, IsLength } from '@/utils/string'
+import type { Includes, Int, IsLength } from '@/utils'
 
 test('Includes<T, U>', () => {
   assertType<Includes<'Hello', 'H'>>(true) // <- first

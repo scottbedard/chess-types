@@ -1,6 +1,6 @@
 import { assertType, describe, test } from 'vitest'
 import type { ParseFen } from '@/parsers'
-import type { PositionIndex } from '@/board'
+import type { PositionIndex } from '@/base'
 import type { RookMoves } from '@/pieces/rook'
 import type { ToSans } from '@/formatters'
 

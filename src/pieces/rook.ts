@@ -1,6 +1,11 @@
-import type { Color, ParsedGame } from '@/chess'
-import type { _Walk, Index } from '@/board'
-import type { ToMoves } from './shared'
+import type {
+  _Walk,
+  Color,
+  Index,
+  ParsedGame,
+} from '@/base'
+
+import type { ToMoves } from '@/utils'
 
 export type RookMoves<
   Game extends ParsedGame,
