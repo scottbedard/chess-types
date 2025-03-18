@@ -1,6 +1,6 @@
 import { assertType, describe, test } from 'vitest'
-import { Position } from '@/board'
-import type { ParseBoard, ParseCastling, ParseFen } from '@/parsers'
+import { PositionIndex } from '@/board'
+import type { ParseBoard, ParseCastling, ParseFen, ParseSan } from '@/parsers'
 
 describe('ParseBoard<T>', () => {
   test('success', () => {
@@ -94,7 +94,7 @@ describe('ParseFen<T>', () => {
   test('success, en passant', () => {
     type Result = ParseFen<'8/8/8/8/3P4/8/8/8 b - d3 0 1'>
 
-    assertType<Result['ep'] extends Position['d3'] ? true : false>(true)
+    assertType<Result['ep'] extends PositionIndex['d3'] ? true : false>(true)
   })
 
   test('fail, invalid turn color', () => {
@@ -133,5 +133,33 @@ describe('ParseFen<T>', () => {
 
     assertType<IllegalCharacter>(true)
     assertType<IllegalPosition>(true)
+  })
+})
+
+describe('ParseSan<T>', () => {
+  test('e2e4', () => {
+    type Result = ParseSan<'e2e4'>
+
+    assertType<Result>({
+      from: 52,
+      to: 36,
+      promotion: null,
+    })
+  })
+
+  test('a7a8Q', () => {
+    type Result = ParseSan<'a7a8Q'>
+
+    assertType<Result>({
+      from: 8,
+      to: 0,
+      promotion: 'Q',
+    })
+  })
+
+  test('whoops', () => {
+    type Result = ParseSan<'whoops'> extends never ? true : false
+
+    assertType<Result>(true)
   })
 })

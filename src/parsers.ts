@@ -1,5 +1,5 @@
-import { Position } from './board'
-import type { Color, ParsedGame, Piece } from './chess'
+import { PositionIndex } from './board'
+import type { Color, File, ParsedGame, Piece, PromotionPiece, Rank } from './chess'
 import type { Includes, Int } from './utils/string'
 
 /** Normalize fen board string to a 64 character string */
@@ -46,7 +46,7 @@ export type _ParseFen<T extends string> =
       ep: _Ep extends
         | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3'
         | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6'
-        ? Position[_Ep]
+        ? PositionIndex[_Ep]
         : _Ep extends '-'
           ? null
           : never
@@ -56,3 +56,13 @@ export type _ParseFen<T extends string> =
       turn: _Turn extends Color ? _Turn : never
     }
   : never
+
+/** Parse move notation */
+export type ParseSan<T extends string> =
+  T extends `${infer FromFile extends File}${infer FromRank extends Rank}${infer ToFile extends File}${infer ToRank extends Rank}${infer Promotion extends PromotionPiece | ''}`
+    ? {
+      from: PositionIndex[`${FromFile}${FromRank}`],
+      to: PositionIndex[`${ToFile}${ToRank}`],
+      promotion: Promotion extends PromotionPiece ? Promotion : null
+    }
+    : never

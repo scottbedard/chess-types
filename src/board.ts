@@ -24,8 +24,11 @@ export type Positions = [
   'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1',
 ]
 
+/** Union of all positions */
+export type Position = Positions[Index]
+
 /** Lookup table to get a position's fen index */
-export type Position = {
+export type PositionIndex = {
   a8: 0,  b8: 1,  c8: 2,  d8: 3,  e8: 4,  f8: 5,  g8: 6,  h8: 7,
   a7: 8,  b7: 9,  c7: 10, d7: 11, e7: 12, f7: 13, g7: 14, h7: 15,
   a6: 16, b6: 17, c6: 18, d6: 19, e6: 20, f6: 21, g6: 22, h6: 23,
@@ -34,6 +37,13 @@ export type Position = {
   a3: 40, b3: 41, c3: 42, d3: 43, e3: 44, f3: 45, g3: 46, h3: 47,
   a2: 48, b2: 49, c2: 50, d2: 51, e2: 52, f2: 53, g2: 54, h2: 55,
   a1: 56, b1: 57, c1: 58, d1: 59, e1: 60, f1: 61, g1: 62, h1: 63,
+}
+
+/** Move notation */
+export type Move = {
+  from: Index
+  to: Index
+  promotion: 'q' | 'r' | 'b' | 'n' | 'Q' | 'R' | 'B' | 'N' | null
 }
 
 /**
@@ -127,7 +137,7 @@ export type Graph = [
 export type Step<
   From extends Positions[Index],
   Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-  U = Graph[Position[From]][Direction]
+  U = Graph[PositionIndex[From]][Direction]
 > = U extends Index
   ? Positions[U]
   : never
@@ -146,7 +156,7 @@ export type Walk<
   Friendly extends Color,
   From extends Positions[Index],
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
-  Path = _Walk<Game, Friendly, Position[From], Direction>
+  Path = _Walk<Game, Friendly, PositionIndex[From], Direction>
 > = Path extends Index[]
   ? ToPositions<Path>
   : never
