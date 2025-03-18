@@ -7,6 +7,7 @@ import type {
   ParsedGame,
   PositionIndex,
   Positions,
+  Unoccupied,
 } from '@/base'
 
 import type { ToPositions } from '@/utils'
@@ -20,7 +21,7 @@ export type Walk<
   Acc extends Index[] = [],
   To = Graph[From][Direction]
 > = To extends Index
-  ? Game['board'][To] extends '_'
+  ? Game['board'][To] extends Unoccupied
     ? Walk<Game, Friendly, To, Direction, [...Acc, To]>
     : Game['board'][To] extends FriendlyPiece<Friendly>
       ? Acc

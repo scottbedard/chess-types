@@ -5,6 +5,7 @@ import type {
   Graph,
   Index,
   ParsedGame,
+  Unoccupied,
 } from '@/base'
 
 import type { ToMoves } from '@/utils'
@@ -39,7 +40,6 @@ export type _KingStep<
   : []
 
 /** Castling moves */
-// @todo: check castling rights
 type _KingCastle<
   Game extends ParsedGame,
   Friendly extends Color,
@@ -49,9 +49,9 @@ type _KingCastle<
   ? _HasCastlingRights<Game, Friendly, Direction> extends true
     ? Direction extends 5
       ? Graph[From][5] extends infer Short1 extends Index
-        ? Game['board'][Short1] extends '_'
+        ? Game['board'][Short1] extends Unoccupied
           ? Graph[Short1][5] extends infer Short2 extends Index
-            ? Game['board'][Short2] extends '_'
+            ? Game['board'][Short2] extends Unoccupied
               ? Graph[Short2][5] extends infer RookPosition extends Index
                 ? Game['board'][RookPosition] extends _FriendlyRook<Friendly>
                   ? [Short2]
@@ -62,11 +62,11 @@ type _KingCastle<
           : []
         : []
       : Graph[From][3] extends infer Long1 extends Index
-        ? Game['board'][Long1] extends '_'
+        ? Game['board'][Long1] extends Unoccupied
           ? Graph[Long1][3] extends infer Long2 extends Index
-            ? Game['board'][Long2] extends '_'
+            ? Game['board'][Long2] extends Unoccupied
               ? Graph[Long2][3] extends infer Long3 extends Index
-                ? Game['board'][Long3] extends '_'
+                ? Game['board'][Long3] extends Unoccupied
                   ? Graph[Long3][3] extends infer RookPosition extends Index
                     ? Game['board'][RookPosition] extends _FriendlyRook<Friendly>
                       ? [Long2]

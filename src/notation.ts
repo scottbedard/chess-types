@@ -11,6 +11,7 @@ import type {
   Positions,
   PromotionPiece,
   Rank,
+  Unoccupied,
 } from '@/base'
 
 import type {
@@ -70,17 +71,17 @@ export type ToSans<
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<
   T extends string,
-  Acc extends (string | '_')[] = []
+  Acc extends string[] = []
 > = T extends `${infer Head}${infer Rest}`
   ? Head extends '/' ? ParseBoard<Rest, [...Acc]> :
-    Head extends '1' ? ParseBoard<Rest, [...Acc, '_']> :
-    Head extends '2' ? ParseBoard<Rest, [...Acc, '_', '_']> :
-    Head extends '3' ? ParseBoard<Rest, [...Acc, '_', '_', '_']> :
-    Head extends '4' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_']> :
-    Head extends '5' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_']> :
-    Head extends '6' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_', '_']> :
-    Head extends '7' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_', '_', '_']> :
-    Head extends '8' ? ParseBoard<Rest, [...Acc, '_', '_', '_', '_', '_', '_', '_', '_']> :
+    Head extends '1' ? ParseBoard<Rest, [...Acc, Unoccupied]> :
+    Head extends '2' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied]> :
+    Head extends '3' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied, Unoccupied]> :
+    Head extends '4' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied, Unoccupied, Unoccupied]> :
+    Head extends '5' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied]> :
+    Head extends '6' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied]> :
+    Head extends '7' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied]> :
+    Head extends '8' ? ParseBoard<Rest, [...Acc, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied, Unoccupied]> :
     Head extends Piece ? ParseBoard<Rest, [...Acc, Head]> : never
   : Acc['length'] extends 64 ? Acc : never
 

@@ -21,8 +21,11 @@ export type Piece = BlackPiece | WhitePiece
 /** Promotion pieces */
 export type PromotionPiece = Exclude<Piece, 'p' | 'P' | 'k' | 'K'>
 
+/** Unoccupied piece */
+export type Unoccupied = ' '
+
 /** Possible value at a position */
-export type MaybePiece = Piece | '_'
+export type MaybePiece = Piece | Unoccupied
 
 /** Friendly pieces */
 export type FriendlyPiece<T extends Color> = T extends 'b' ? BlackPiece : WhitePiece

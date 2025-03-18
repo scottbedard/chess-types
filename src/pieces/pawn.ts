@@ -6,6 +6,7 @@ import type {
   Index,
   ParsedGame,
   ParsedMove,
+  Unoccupied,
 } from '@/base'
 
 import { ToMoves } from '@/utils'
@@ -34,12 +35,12 @@ type _PawnAdvance<
   From extends Index,
   Forward extends 1 | 7 = Friendly extends 'w' ? 1 : 7,
 > = Graph[From][Forward] extends infer First extends Index
-  ? Game['board'][First] extends '_'
+  ? Game['board'][First] extends Unoccupied
     ? [
       First,
       ...From extends _PawnStartingPositions
         ? Graph[First][Forward] extends infer Second extends Index
-          ? Game['board'][Second] extends '_'
+          ? Game['board'][Second] extends Unoccupied
             ? [Second]
             : []
           : []
@@ -59,7 +60,7 @@ type _PawnCapture<
   From extends Index,
   Direction extends 0 | 2 | 6 | 8,
 > = Graph[From][Direction] extends infer To extends Index
-    ? Game['board'][To] extends FriendlyPiece<Friendly> | '_'
+    ? Game['board'][To] extends FriendlyPiece<Friendly> | Unoccupied
       ? []
       : [To]
     : []
