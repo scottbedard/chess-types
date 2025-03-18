@@ -181,10 +181,22 @@ describe('PawnMoves<Game, Color, From>', () => {
   })
 
   test('white promotion', () => {
-    // ...
+    type Game = ParseFen<'4r3/3P4/8/8/8/8/8/8 w - - 0 1'>
+
+    type Result = ToSans<PawnMoves<Game, 'w', PositionIndex['d7']>>
+
+    assertType<Result>([
+      'd7d8Q', 'd7d8R', 'd7d8N', 'd7d8B', 'd7e8Q', 'd7e8R', 'd7e8N', 'd7e8B'
+    ])
   })
 
   test('black promotion', () => {
-    // ...
+    type Game = ParseFen<'8/8/8/8/8/8/4p3/3R4 b - - 0 1'>
+
+    type Result = ToSans<PawnMoves<Game, 'b', PositionIndex['e2']>>
+
+    assertType<Result>([
+      'e2e1q', 'e2e1r', 'e2e1n', 'e2e1b', 'e2d1q', 'e2d1r', 'e2d1n', 'e2d1b'
+    ])
   })
 })
