@@ -8,12 +8,13 @@ export type PawnMoves<
   Portside extends 0 | 8 = Friendly extends 'w' ? 0 : 8,
   Starboard extends 2 | 6 = Friendly extends 'w' ? 2 : 6
 > = [
-  ..._PawnAdvance<Game, Friendly, From>,
-  ..._PawnCapture<Game, Friendly, From, Portside>,
-  ..._PawnCapture<Game, Friendly, From, Starboard>,
+  ..._PawnPromotion<[
+    ..._PawnAdvance<Game, Friendly, From>,
+    ..._PawnCapture<Game, Friendly, From, Portside>,
+    ..._PawnCapture<Game, Friendly, From, Starboard>,
+  ]>,
   ..._PawnEnPassant<Game, Friendly, From, Portside>,
   ..._PawnEnPassant<Game, Friendly, From, Starboard>,
-  // @todo: promotions
 ]
 
 /** advance pawn forward, and if allowed advance again */
@@ -67,3 +68,6 @@ type _PawnEnPassant<
     ? [To]
     : []
   : []
+
+/** promotions */
+export type _PawnPromotion<T extends Index[]> = T // @todo
