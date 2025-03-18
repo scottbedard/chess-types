@@ -2,7 +2,7 @@ import type { Color, FriendlyPiece, ParsedGame } from './chess'
 /* eslint-disable @stylistic/no-multi-spaces */
 
 /** Union of all possible fen indices */
-type Index =
+export type Index =
   |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7
   |  8 |  9 | 10 | 11 | 12 | 13 | 14 | 15
   | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23
@@ -13,7 +13,7 @@ type Index =
   | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63
 
 /** Sorted list of positions by fen index */
-type Positions = [
+export type Positions = [
   'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8',
   'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7',
   'a6', 'b6', 'c6', 'd6', 'e6', 'f6', 'g6', 'h6',
@@ -25,7 +25,7 @@ type Positions = [
 ]
 
 /** Lookup table to get a position's fen index */
-export type PositionSet = {
+export type Position = {
   a8: 0,  b8: 1,  c8: 2,  d8: 3,  e8: 4,  f8: 5,  g8: 6,  h8: 7,
   a7: 8,  b7: 9,  c7: 10, d7: 11, e7: 12, f7: 13, g7: 14, h7: 15,
   a6: 16, b6: 17, c6: 18, d6: 19, e6: 20, f6: 21, g6: 22, h6: 23,
@@ -56,7 +56,7 @@ export type PositionSet = {
  * ]
  *
  */
-type Graph = [
+export type Graph = [
   [-1, -1, -1, -1,  0,  1, -1,  8,  9],
   [-1, -1, -1,  0,  1,  2,  8,  9, 10],
   [-1, -1, -1,  1,  2,  3,  9, 10, 11],
@@ -127,16 +127,17 @@ type Graph = [
 export type Step<
   From extends Positions[Index],
   Direction extends 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8,
-  U = Graph[PositionSet[From]][Direction]
+  U = Graph[Position[From]][Direction]
 > = U extends Index
   ? Positions[U]
   : never
 
-type _StepPositions<
+/** Map indices to their named position */
+export type ToPositions<
   T extends Index[],
   Acc extends Positions[Index][] = []
 > = T extends [infer U extends Index, ...infer V extends Index[]]
-  ? _StepPositions<V, [...Acc, Positions[U]]>
+  ? ToPositions<V, [...Acc, Positions[U]]>
   : Acc
 
 /** Walk along the graph, stopping short of friendly pieces */
@@ -145,9 +146,9 @@ export type Walk<
   Friendly extends Color,
   From extends Positions[Index],
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8, // <- cannot walk to center index
-  Path = _Walk<Game, Friendly, PositionSet[From], Direction>
+  Path = _Walk<Game, Friendly, Position[From], Direction>
 > = Path extends Index[]
-  ? _StepPositions<Path>
+  ? ToPositions<Path>
   : never
 
 export type _Walk<
