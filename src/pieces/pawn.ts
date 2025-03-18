@@ -1,5 +1,4 @@
 import type {
-  _Walk,
   Color,
   FriendlyPiece,
   Graph,
