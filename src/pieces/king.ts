@@ -21,8 +21,7 @@ export type _KingStep<
   Friendly extends Color,
   From extends Index,
   Direction extends 0 | 1 | 2 | 3 | 5 | 6 | 7 | 8,
-  To = Graph[From][Direction]
-> = To extends Index
+> = Graph[From][Direction] extends infer To extends Index
   ? Game['board'][To] extends FriendlyPiece<Friendly>
     ? []
     : [To]
