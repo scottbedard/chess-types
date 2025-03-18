@@ -5,11 +5,10 @@ export type PawnMoves<
   Game extends ParsedGame,
   Friendly extends Color,
   From extends Index,
-  Forward extends 1 | 7 = Friendly extends 'w' ? 1 : 7,
   Portside extends 0 | 8 = Friendly extends 'w' ? 0 : 8,
   Starboard extends 2 | 6 = Friendly extends 'w' ? 2 : 6
 > = [
-  ..._PawnAdvance<Game, Friendly, From, Forward>,
+  ..._PawnAdvance<Game, Friendly, From>,
   ..._PawnCapture<Game, Friendly, From, Portside>,
   ..._PawnCapture<Game, Friendly, From, Starboard>,
   // ..._PawnCaptureStarboard<Game, Friendly, From>,
@@ -23,7 +22,7 @@ type _PawnAdvance<
   Game extends ParsedGame,
   Friendly extends Color,
   From extends Index,
-  Forward extends 1 | 7,
+  Forward extends 1 | 7 = Friendly extends 'w' ? 1 : 7,
 > = Graph[From][Forward] extends infer First extends Index
   ? Game['board'][First] extends '_'
     ? [
@@ -52,7 +51,11 @@ type _PawnCapture<
   Friendly extends Color,
   From extends Index,
   Direction extends 0 | 2 | 6 | 8,
-> = []
+> = Graph[From][Direction] extends infer To extends Index
+    ? Game['board'][To] extends FriendlyPiece<Friendly> | '_'
+      ? []
+      : [To]
+    : []
 
 // // left
 // type _PawnCapturePortside<
