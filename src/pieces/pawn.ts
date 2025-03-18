@@ -6,8 +6,6 @@ import type {
   ParsedGame,
 } from '@/base'
 
-import type { ToMoves } from '@/utils'
-
 export type PawnMoves<
   Game extends ParsedGame,
   Friendly extends Color,
@@ -15,11 +13,9 @@ export type PawnMoves<
   Portside extends 0 | 8 = Friendly extends 'w' ? 0 : 8,
   Starboard extends 2 | 6 = Friendly extends 'w' ? 2 : 6
 > = [
-  ...ToMoves<[
-    ..._PawnAdvance<Game, Friendly, From>,
-    ..._PawnCapture<Game, Friendly, From, Portside>,
-    ..._PawnCapture<Game, Friendly, From, Starboard>,
-  ], From>,
+  ..._PawnAdvance<Game, Friendly, From>,
+  ..._PawnCapture<Game, Friendly, From, Portside>,
+  ..._PawnCapture<Game, Friendly, From, Starboard>,
   ..._PawnEnPassant<Game, Friendly, From, Portside>,
   ..._PawnEnPassant<Game, Friendly, From, Starboard>,
 ]
@@ -33,11 +29,11 @@ type _PawnAdvance<
 > = Graph[From][Forward] extends infer First extends Index
   ? Game['board'][First] extends '_'
     ? [
-      First,
+      { from: From, to: First, promotion: null },
       ..._StartingPosition<Friendly, From> extends true
         ? Graph[First][Forward] extends infer Second extends Index
           ? Game['board'][Second] extends '_'
-            ? [Second]
+            ? [{ from: From, to: Second, promotion: null }]
             : []
           : []
         : []
