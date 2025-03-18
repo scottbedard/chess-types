@@ -1,3 +1,5 @@
+import { Index } from './board'
+
 /** Black or white */
 export type Color = 'b' | 'w'
 
@@ -38,7 +40,7 @@ export type ParsedGame = {
   ]
   turn: Color
   castling: Castling
-  ep: string
+  ep: Index | null
   halfmove: number
   fullmove: number
 }

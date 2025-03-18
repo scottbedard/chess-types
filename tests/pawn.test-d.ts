@@ -1,6 +1,6 @@
 import { assertType, describe, test } from 'vitest'
-import type { PawnMoves } from '@/pieces/pawn'
 import type { ParseFen } from '@/parsers'
+import type { PawnMoves } from '@/pieces/pawn'
 import type { Position, ToPositions } from '@/board'
 
 describe('PawnMoves<Game, Color, From>', () => {
@@ -92,14 +92,19 @@ describe('PawnMoves<Game, Color, From>', () => {
 
   test('white en passant portside', () => {
     // ...
+    type Game = ParseFen<'8/8/8/3pP3/8/8/8/8 w - d6 0 2'>
+
+    type Result = ToPositions<PawnMoves<Game, 'w', Position['e5']>>
+
+    assertType<Result>(['e6', 'd6'])
   })
 
   test('white en passant starboard', () => {
-    // ...
-  })
+    type Game = ParseFen<'8/8/8/3Pp3/8/8/8/8 w - e6 0 2'>
 
-  test('white promotion', () => {
-    // ...
+    type Result = ToPositions<PawnMoves<Game, 'w', Position['d5']>>
+
+    assertType<Result>(['d6', 'e6'])
   })
 
   test('black advance forward', () => {
@@ -159,10 +164,22 @@ describe('PawnMoves<Game, Color, From>', () => {
   })
 
   test('black en passant portside', () => {
-    // ...
+    type Game = ParseFen<'8/8/8/8/3pP3/8/8/8 b - e3 0 1'>
+
+    type Result = ToPositions<PawnMoves<Game, 'b', Position['d4']>>
+
+    assertType<Result>(['d3', 'e3'])
   })
 
   test('black en passant starboard', () => {
+    type Game = ParseFen<'8/8/8/8/3Pp3/8/8/8 b - d3 0 1'>
+
+    type Result = ToPositions<PawnMoves<Game, 'b', Position['e4']>>
+
+    assertType<Result>(['e3', 'd3'])
+  })
+
+  test('white promotion', () => {
     // ...
   })
 

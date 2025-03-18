@@ -1,5 +1,5 @@
 import type { Color, FriendlyPiece, ParsedGame } from '@/chess'
-import type { Graph, Index, Position, _Walk } from '@/board'
+import type { Graph, Index, _Walk } from '@/board'
 
 export type PawnMoves<
   Game extends ParsedGame,
@@ -11,9 +11,8 @@ export type PawnMoves<
   ..._PawnAdvance<Game, Friendly, From>,
   ..._PawnCapture<Game, Friendly, From, Portside>,
   ..._PawnCapture<Game, Friendly, From, Starboard>,
-  // ..._PawnCaptureStarboard<Game, Friendly, From>,
-  // ..._PawnCaptureEnPassantPortside<Game, Friendly, From>,
-  // ..._PawnCaptureEnPassantStarboard<Game, Friendly, From>,
+  ..._PawnEnPassant<Game, Friendly, From, Portside>,
+  ..._PawnEnPassant<Game, Friendly, From, Starboard>,
   // @todo: promotions
 ]
 
@@ -45,7 +44,7 @@ type _StartingPosition<
   ? From extends 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 ? true : false
   : From extends 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 ? true : false
 
-/** attempt to capture enemy piece */
+/** capture enemy piece */
 type _PawnCapture<
   Game extends ParsedGame,
   Friendly extends Color,
@@ -57,29 +56,14 @@ type _PawnCapture<
       : [To]
     : []
 
-// // left
-// type _PawnCapturePortside<
-//   Game extends ParsedGame,
-//   Friendly extends Color,
-//   From extends Index,
-// > = []
-
-// // right
-// type _PawnCaptureStarboard<
-//   Game extends ParsedGame,
-//   Friendly extends Color,
-//   From extends Index,
-// > = []
-
-// // en passant left
-// type _PawnCaptureEnPassantPortside<
-//   Game extends ParsedGame,
-//   Friendly extends Color,
-//   From extends Index,
-// > = []
-
-// type _PawnCaptureEnPassantStarboard<
-//   Game extends ParsedGame,
-//   Friendly extends Color,
-//   From extends Index,
-// > = []
+/** capture en passant */
+type _PawnEnPassant<
+  Game extends ParsedGame,
+  Friendly extends Color,
+  From extends Index,
+  Direction extends 0 | 2 | 6 | 8,
+> = Graph[From][Direction] extends infer To extends Game['ep']
+  ? Game['turn'] extends Friendly
+    ? [To]
+    : []
+  : []
