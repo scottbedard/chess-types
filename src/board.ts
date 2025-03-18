@@ -37,7 +37,7 @@ export type Position = {
 }
 
 /**
- * The graph represents the positions of a chessboard and their relationship to
+ * This graph represents the positions on a chessboard and their relationship to
  * one another. Each index coorelates to a position on the board, and each child
  * value represents the index of a neighboring position relative to a 3x3 grid,
  * with the original position at the center. -1 represents off the board.
