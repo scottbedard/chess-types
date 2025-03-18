@@ -1,5 +1,6 @@
-import type { Includes, Int } from './utils/string'
+import { Position } from './board'
 import type { Color, ParsedGame, Piece } from './chess'
+import type { Includes, Int } from './utils/string'
 
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<
@@ -42,7 +43,13 @@ export type _ParseFen<T extends string> =
   T extends `${infer _Board} ${infer _Turn} ${infer _Castling} ${infer _Ep} ${infer Halfmove} ${infer Fullmove}`
     ? {
       board: ParseBoard<_Board>
-      ep: _Ep
+      ep: _Ep extends
+        | 'a3' | 'b3' | 'c3' | 'd3' | 'e3' | 'f3' | 'g3' | 'h3'
+        | 'a6' | 'b6' | 'c6' | 'd6' | 'e6' | 'f6' | 'g6' | 'h6'
+        ? Position[_Ep]
+        : _Ep extends '-'
+          ? null
+          : never
       halfmove: Int<Halfmove>
       fullmove: Int<Fullmove>
       castling: ParseCastling<_Castling>

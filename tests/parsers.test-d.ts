@@ -1,4 +1,5 @@
 import { assertType, describe, test } from 'vitest'
+import { Position } from '@/board'
 import type { ParseBoard, ParseCastling, ParseFen } from '@/parsers'
 
 describe('ParseBoard<T>', () => {
@@ -84,10 +85,16 @@ describe('ParseFen<T>', () => {
         K: true,
         Q: true,
       },
-      ep: '-',
+      ep: null,
       halfmove: 0,
       fullmove: 1,
     })
+  })
+
+  test('success, en passant', () => {
+    type Result = ParseFen<'8/8/8/8/3P4/8/8/8 b - d3 0 1'>
+
+    assertType<Result['ep'] extends Position['d3'] ? true : false>(true)
   })
 
   test('fail, invalid turn color', () => {
@@ -118,5 +125,13 @@ describe('ParseFen<T>', () => {
     type Result = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 -1'> extends never ? true : false
 
     assertType<Result>(true)
+  })
+
+  test('fail, invalid en passant', () => {
+    type IllegalCharacter = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR - KQkq x 0 1'> extends never ? true : false
+    type IllegalPosition = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR - KQkq c5 0 1'> extends never ? true : false
+
+    assertType<IllegalCharacter>(true)
+    assertType<IllegalPosition>(true)
   })
 })
