@@ -1,5 +1,4 @@
 /* eslint-disable @stylistic/no-multi-spaces */
-
 import type {
   Color,
   FriendlyPiece,

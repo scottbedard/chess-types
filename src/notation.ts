@@ -1,9 +1,14 @@
 import type {
+  Castling,
   Color,
+  DirectionIndex,
   File,
   ParsedGame,
+  ParsedMove,
   Piece,
+  Position,
   PositionIndex,
+  Positions,
   PromotionPiece,
   Rank,
 } from '@/base'
@@ -11,7 +16,56 @@ import type {
 import type {
   Includes,
   Int,
+  IsLength,
 } from '@/utils'
+
+/** Format parsed game to fen notation */
+export type FormatGame<T extends string> =
+  IsLength<T, 64> extends false ? never : _FormatGame<T>
+
+type _FormatGame<
+  T extends string,
+  Acc extends string = '',
+  Count extends DirectionIndex = 0,
+  Skip extends DirectionIndex = 0,
+  Rank extends DirectionIndex = 0
+> = Count extends 8
+  ? _FormatGame<T, `${Acc}${Skip extends 0 ? '' : Skip}${Rank extends 7 ? '' : '/'}`, 0, 0, _Tick<Rank>>
+  : Skip extends 8
+    ? never
+    : T extends `${infer Head}${infer Tail}`
+      ? Head extends Piece
+        ? _FormatGame<Tail, `${Acc}${Skip extends 0 ? '' : Skip}${Head}`, _Tick<Count>, 0, Rank>
+        : _FormatGame<Tail, Acc, _Tick<Count>, _Tick<Skip>, Rank>
+      : Acc
+
+type _Tick<T extends DirectionIndex> =
+  T extends 0 ? 1 :
+  T extends 1 ? 2 :
+  T extends 2 ? 3 :
+  T extends 3 ? 4 :
+  T extends 4 ? 5 :
+  T extends 5 ? 6 :
+  T extends 6 ? 7 : 8
+
+/** stringify casting rights */
+export type FormatCastling<
+  T extends Castling,
+  U = `${T['K'] extends true ? 'K' : ''}${T['Q'] extends true ? 'Q' : ''}${T['k'] extends true ? 'k' : ''}${T['q'] extends true ? 'q' : ''}`
+> = U extends '' ? '-' : U
+
+/** format san */
+export type FormatSan<
+  T extends ParsedMove,
+> = `${Positions[T['from']]}${Positions[T['to']]}${T['promotion'] extends PromotionPiece ? T['promotion'] : ''}`
+
+/** format tuple of sans */
+export type ToSans<
+  T extends ParsedMove[],
+  Acc extends `${Position}${Position}${PromotionPiece | ''}`[] = []
+> = T extends [infer U extends ParsedMove, ...infer V extends ParsedMove[]]
+  ? ToSans<V, [...Acc, FormatSan<U>]>
+  : Acc
 
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<

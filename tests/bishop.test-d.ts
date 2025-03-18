@@ -1,8 +1,7 @@
 import { assertType, describe, test } from 'vitest'
 import type { BishopMoves } from '@/pieces/bishop'
-import type { ParseFen } from '@/parsers'
+import type { ParseFen, ToSans } from '@/notation'
 import type { PositionIndex } from '@/base'
-import type { ToSans } from '@/formatters'
 
 describe('BishopMoves<Game, Color, From>', () => {
   test('c3', () => {

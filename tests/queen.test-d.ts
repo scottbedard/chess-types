@@ -1,8 +1,7 @@
 import { assertType, describe, test } from 'vitest'
-import type { ParseFen } from '@/parsers'
+import type { ParseFen, ToSans } from '@/notation'
 import type { PositionIndex } from '@/base'
 import type { QueenMoves } from '@/pieces/queen'
-import type { ToSans } from '@/formatters'
 
 describe('QueenMoves<Game, Color, From>', () => {
   test('a1', () => {

@@ -1,5 +1,5 @@
 import { assertType, describe, test } from 'vitest'
-import type { ParseFen } from '@/parsers'
+import type { ParseFen } from '@/notation'
 import type { WalkPositions } from '@/board'
 
 describe('WalkPositions<Game, Color, From, Direction>', () => {
