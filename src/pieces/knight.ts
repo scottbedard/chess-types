@@ -1,11 +1,12 @@
 import type { Color, FriendlyPiece, ParsedGame } from '@/chess'
 import type { Graph, Index } from '@/board'
+import type { ToMoves } from './shared'
 
 export type KnightMoves<
   Game extends ParsedGame,
   Friendly extends Color,
   From extends Index,
-> = [
+> = ToMoves<[
   ..._KnightStep<Game, Friendly, From, 0, 1>,
   ..._KnightStep<Game, Friendly, From, 0, 3>,
   ..._KnightStep<Game, Friendly, From, 2, 1>,
@@ -14,7 +15,7 @@ export type KnightMoves<
   ..._KnightStep<Game, Friendly, From, 6, 7>,
   ..._KnightStep<Game, Friendly, From, 8, 5>,
   ..._KnightStep<Game, Friendly, From, 8, 7>,
-]
+], From>
 
 type _KnightStep<
   Game extends ParsedGame,

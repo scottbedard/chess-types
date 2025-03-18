@@ -1,5 +1,6 @@
 import type { Color, FriendlyPiece, ParsedGame } from '@/chess'
 import type { Graph, Index, _Walk } from '@/board'
+import type { ToMoves } from './shared'
 
 export type PawnMoves<
   Game extends ParsedGame,
@@ -8,11 +9,11 @@ export type PawnMoves<
   Portside extends 0 | 8 = Friendly extends 'w' ? 0 : 8,
   Starboard extends 2 | 6 = Friendly extends 'w' ? 2 : 6
 > = [
-  ..._PawnPromotion<[
+  ...ToMoves<[
     ..._PawnAdvance<Game, Friendly, From>,
     ..._PawnCapture<Game, Friendly, From, Portside>,
     ..._PawnCapture<Game, Friendly, From, Starboard>,
-  ]>,
+  ], From>,
   ..._PawnEnPassant<Game, Friendly, From, Portside>,
   ..._PawnEnPassant<Game, Friendly, From, Starboard>,
 ]
@@ -65,7 +66,7 @@ type _PawnEnPassant<
   Direction extends 0 | 2 | 6 | 8,
 > = Graph[From][Direction] extends infer To extends Game['ep']
   ? Game['turn'] extends Friendly
-    ? [To]
+    ? [{ to: To, from: From, promotion: null }]
     : []
   : []
 

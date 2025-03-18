@@ -1,6 +1,6 @@
 import type { Castling, ParsedMove, Piece, PromotionPiece } from './chess'
 import type { IsLength } from './utils/string'
-import type { Positions } from './board'
+import type { Position, Positions } from './board'
 
 /** format board to fen notation */
 export type FormatGame<T extends string> =
@@ -41,3 +41,11 @@ export type FormatCastling<
 export type FormatSan<
   T extends ParsedMove,
 > = `${Positions[T['from']]}${Positions[T['to']]}${T['promotion'] extends PromotionPiece ? T['promotion'] : ''}`
+
+/** format tuple of sans */
+export type ToSans<
+  T extends ParsedMove[],
+  Acc extends `${Position}${Position}${PromotionPiece | ''}`[] = []
+> = T extends [infer U extends ParsedMove, ...infer V extends ParsedMove[]]
+  ? ToSans<V, [...Acc, FormatSan<U>]>
+  : Acc
