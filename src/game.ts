@@ -4,11 +4,19 @@ import {
   FriendlyPiece,
   Index,
   Indices,
+  Move,
   ParsedGame,
   Piece,
+  PieceColor,
 } from './base'
 
+import type { BishopMoves } from './pieces/bishop'
 import type { IsOdd } from './utils'
+import type { KingMoves } from './pieces/king'
+import type { KnightMoves } from './pieces/knight'
+import type { PawnMoves } from './pieces/pawn'
+import type { QueenMoves } from './pieces/queen'
+import type { RookMoves } from './pieces/rook'
 
 /** Get all positions occupied by a color */
 export type OccupiedBy<
@@ -22,13 +30,23 @@ export type OccupiedBy<
     : OccupiedBy<C, Game, Tail, Acc>
   : Acc
 
-// export type ToMoves<
-//   T extends Index[],
-//   From extends Index,
-//   Acc extends unknown[] = []
-// > = T extends [infer To extends Index, ...infer Tail extends Index[]]
-//   ? ToMoves<Tail, From, [...Acc, { from: From, to: To, promotion: null }]>
-//   : Acc
+/** Get all possible moves, even ones that result in self-check */
+export type CurrentMovesUnsafe<
+  Game extends ParsedGame,
+  Turn extends Color = Game['turn'],
+  Moves extends Index[] = OccupiedBy<Turn, Game>,
+  Acc extends Move[] = []
+> = Moves extends [infer Head extends Index, ...infer Tail extends Index[]]
+  ? Game['board'][Head] extends infer CurrentPiece extends Piece
+    ? CurrentPiece extends 'p' | 'P' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...PawnMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'n' | 'N' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KnightMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'b' | 'B' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...BishopMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'r' | 'R' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...RookMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'q' | 'Q' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...QueenMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'k' | 'K' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KingMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : never
+    : never
+  : Acc
 
 /** create a debuggable representation of the chessboard */
 export type Chessboard<T extends ParsedGame> = {

@@ -27,6 +27,9 @@ export type Unoccupied = ' '
 /** Possible value at a position */
 export type MaybePiece = Piece | Unoccupied
 
+/** Pieces by color */
+export type PieceColor<T extends Piece> = T extends BlackPiece ? 'b' : 'w'
+
 /** Friendly pieces */
 export type FriendlyPiece<T extends Color> = T extends 'b' ? BlackPiece : WhitePiece
 
