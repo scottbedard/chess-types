@@ -64,7 +64,7 @@ export type ParsedGame = {
 export type ParsedMove = {
   from: Index
   to: Index
-  promotion: PromotionPiece | null
+  promotion: PromotionPiece | ''
 }
 
 /** All possible board indices */
@@ -115,7 +115,7 @@ export type PositionIndex = {
 export type Move = {
   from: Index
   to: Index
-  promotion: 'q' | 'r' | 'b' | 'n' | 'Q' | 'R' | 'B' | 'N' | null
+  promotion: 'q' | 'r' | 'b' | 'n' | 'Q' | 'R' | 'B' | 'N' | ''
 }
 
 /**

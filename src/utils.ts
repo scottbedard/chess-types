@@ -39,7 +39,7 @@ export type ToMoves<
   From extends Index,
   Acc extends unknown[] = []
 > = T extends [infer To extends Index, ...infer Tail extends Index[]]
-  ? ToMoves<Tail, From, [...Acc, { from: From, to: To, promotion: null }]>
+  ? ToMoves<Tail, From, [...Acc, { from: From, to: To, promotion: '' }]>
   : Acc
 
 /** Map indices to their named position */

@@ -58,7 +58,7 @@ export type FormatCastling<
 /** format san */
 export type FormatSan<
   T extends ParsedMove,
-> = `${Positions[T['from']]}${Positions[T['to']]}${T['promotion'] extends PromotionPiece ? T['promotion'] : ''}`
+> = `${Positions[T['from']]}${Positions[T['to']]}${T['promotion']}`
 
 /** format tuple of sans */
 export type ToSans<
@@ -129,6 +129,6 @@ export type ParseSan<T extends string> =
     ? {
       from: PositionIndex[`${FromFile}${FromRank}`],
       to: PositionIndex[`${ToFile}${ToRank}`],
-      promotion: Promotion extends PromotionPiece ? Promotion : null
+      promotion: Promotion extends PromotionPiece ? Promotion : ''
     }
     : never

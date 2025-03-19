@@ -72,7 +72,7 @@ describe('FormatSan<T>', () => {
     type Result = FormatSan<{
       from: PositionIndex['f5'],
       to: PositionIndex['f6'],
-      promotion: null
+      promotion: ''
     }>
 
     assertType<Result>('f5f6')
@@ -220,7 +220,7 @@ describe('ParseSan<T>', () => {
     assertType<Result>({
       from: 52,
       to: 36,
-      promotion: null,
+      promotion: '',
     })
   })
 
