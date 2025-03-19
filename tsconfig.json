@@ -6,9 +6,11 @@
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "outDir": "src",
     "paths": {
       "@/*": ["src/*"],
     },
+    "rootDir": "src",
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
