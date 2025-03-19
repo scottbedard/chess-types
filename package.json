@@ -1,14 +1,8 @@
 {
-  "name": "@bedard/chess.d.ts",
-  "version": "0.0.2",
-  "scripts": {
-    "lint:fix": "eslint . --fix",
-    "lint": "eslint .",
-    "test": "vitest --typecheck"
-  },
-  "keywords": [],
   "author": "Scott Bedard",
-  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scottbedard/chess.d.ts/issues"
+  },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@stylistic/eslint-plugin": "^4.2.0",
@@ -17,6 +11,22 @@
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
   },
+  "homepage": "https://github.com/scottbedard/chess.d.ts#readme",
+  "keywords": [],
+  "license": "MIT",
+  "main": "index.mjs",
+  "module": "index.mjs",
+  "name": "@bedard/chess.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottbedard/chess.d.ts.git"
+  },
+  "scripts": {
+    "lint:fix": "eslint . --fix",
+    "lint": "eslint .",
+    "test": "vitest --typecheck"
+  },
   "type": "module",
-  "types": "src/index.d.ts"
+  "types": "src/index.d.ts",
+  "version": "0.0.2"
 }
