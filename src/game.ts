@@ -1,25 +1,21 @@
+/* eslint-disable @stylistic/no-multi-spaces */
 import { IsOdd } from './utils'
 import { ParsedGame, Piece, Index } from './base'
 
-export type _DisplayGame<T extends ParsedGame> = {
-  8: [` ${_Light<T, 0>} ${_Light<T, 1>} ${_Light<T, 2>} ${_Light<T, 3>} ${_Light<T, 4>} ${_Light<T, 5>} ${_Light<T, 6>} ${_Light<T, 7>} `],
-  7: [` ${_Dark<T, 8>} ${_Dark<T, 9>} ${_Dark<T, 10>} ${_Dark<T, 11>} ${_Dark<T, 12>} ${_Dark<T, 13>} ${_Dark<T, 14>} ${_Dark<T, 15>} `],
-  6: [` ${_Light<T, 16>} ${_Light<T, 17>} ${_Light<T, 18>} ${_Light<T, 19>} ${_Light<T, 20>} ${_Light<T, 21>} ${_Light<T, 22>} ${_Light<T, 23>} `],
-  5: [` ${_Dark<T, 24>} ${_Dark<T, 25>} ${_Dark<T, 26>} ${_Dark<T, 27>} ${_Dark<T, 28>} ${_Dark<T, 29>} ${_Dark<T, 30>} ${_Dark<T, 31>} `],
-  4: [` ${_Light<T, 32>} ${_Light<T, 33>} ${_Light<T, 34>} ${_Light<T, 35>} ${_Light<T, 36>} ${_Light<T, 37>} ${_Light<T, 38>} ${_Light<T, 39>} `],
-  3: [` ${_Dark<T, 40>} ${_Dark<T, 41>} ${_Dark<T, 42>} ${_Dark<T, 43>} ${_Dark<T, 44>} ${_Dark<T, 45>} ${_Dark<T, 46>} ${_Dark<T, 47>} `],
-  2: [` ${_Light<T, 48>} ${_Light<T, 49>} ${_Light<T, 50>} ${_Light<T, 51>} ${_Light<T, 52>} ${_Light<T, 53>} ${_Light<T, 54>} ${_Light<T, 55>} `],
-  1: [` ${_Dark<T, 56>} ${_Dark<T, 57>} ${_Dark<T, 58>} ${_Dark<T, 59>} ${_Dark<T, 60>} ${_Dark<T, 61>} ${_Dark<T, 62>} ${_Dark<T, 63>} `],
+/** create a debuggable representation of the chessboard */
+export type Render<T extends ParsedGame> = {
+  8: [` ${_W<T,  0>} ${_W<T,  1>} ${_W<T,  2>} ${_W<T,  3>} ${_W<T,  4>} ${_W<T,  5>} ${_W<T,  6>} ${_W<T,  7>} `],
+  7: [` ${_B<T,  8>} ${_B<T,  9>} ${_B<T, 10>} ${_B<T, 11>} ${_B<T, 12>} ${_B<T, 13>} ${_B<T, 14>} ${_B<T, 15>} `],
+  6: [` ${_W<T, 16>} ${_W<T, 17>} ${_W<T, 18>} ${_W<T, 19>} ${_W<T, 20>} ${_W<T, 21>} ${_W<T, 22>} ${_W<T, 23>} `],
+  5: [` ${_B<T, 24>} ${_B<T, 25>} ${_B<T, 26>} ${_B<T, 27>} ${_B<T, 28>} ${_B<T, 29>} ${_B<T, 30>} ${_B<T, 31>} `],
+  4: [` ${_W<T, 32>} ${_W<T, 33>} ${_W<T, 34>} ${_W<T, 35>} ${_W<T, 36>} ${_W<T, 37>} ${_W<T, 38>} ${_W<T, 39>} `],
+  3: [` ${_B<T, 40>} ${_B<T, 41>} ${_B<T, 42>} ${_B<T, 43>} ${_B<T, 44>} ${_B<T, 45>} ${_B<T, 46>} ${_B<T, 47>} `],
+  2: [` ${_W<T, 48>} ${_W<T, 49>} ${_W<T, 50>} ${_W<T, 51>} ${_W<T, 52>} ${_W<T, 53>} ${_W<T, 54>} ${_W<T, 55>} `],
+  1: [` ${_B<T, 56>} ${_B<T, 57>} ${_B<T, 58>} ${_B<T, 59>} ${_B<T, 60>} ${_B<T, 61>} ${_B<T, 62>} ${_B<T, 63>} `],
 }
 
-type _Dark<
-  Game extends ParsedGame,
-  I extends Index
-> = Game['board'][I] extends infer U extends Piece
-  ? U : IsOdd<I> extends true ? '*' : '-'
+type _B<Game extends ParsedGame,I extends Index> =
+  Game['board'][I] extends infer U extends Piece ? U : IsOdd<I> extends true ? '*' : '-'
 
-type _Light<
-  Game extends ParsedGame,
-  I extends Index
-> = Game['board'][I] extends infer U extends Piece
-  ? U : IsOdd<I> extends true ? '-' : '*'
+type _W<Game extends ParsedGame, I extends Index> =
+  Game['board'][I] extends infer U extends Piece ? U : IsOdd<I> extends true ? '-' : '*'
