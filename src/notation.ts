@@ -3,6 +3,7 @@ import type {
   Color,
   DirectionIndex,
   File,
+  Index,
   ParsedGame,
   ParsedMove,
   Piece,
@@ -59,14 +60,6 @@ export type FormatCastling<
 export type FormatSan<
   T extends ParsedMove,
 > = `${Positions[T['from']]}${Positions[T['to']]}${T['promotion']}`
-
-/** format tuple of sans */
-export type ToSans<
-  T extends ParsedMove[],
-  Acc extends `${Position}${Position}${PromotionPiece | ''}`[] = []
-> = T extends [infer U extends ParsedMove, ...infer V extends ParsedMove[]]
-  ? ToSans<V, [...Acc, FormatSan<U>]>
-  : Acc
 
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<
@@ -132,3 +125,19 @@ export type ParseSan<T extends string> =
       promotion: Promotion extends PromotionPiece ? Promotion : ''
     }
     : never
+
+/** format tuple of sans */
+export type ToSans<
+  T extends ParsedMove[],
+  Acc extends `${Position}${Position}${PromotionPiece | ''}`[] = []
+> = T extends [infer U extends ParsedMove, ...infer V extends ParsedMove[]]
+  ? ToSans<V, [...Acc, FormatSan<U>]>
+  : Acc
+
+/** Map indices to their named position */
+export type ToPositions<
+  T extends Index[],
+  Acc extends Positions[Index][] = []
+> = T extends [infer U extends Index, ...infer V extends Index[]]
+  ? ToPositions<V, [...Acc, Positions[U]]>
+  : Acc

@@ -17,33 +17,50 @@ import type { KnightMoves } from './pieces/knight'
 import type { PawnMoves } from './pieces/pawn'
 import type { QueenMoves } from './pieces/queen'
 import type { RookMoves } from './pieces/rook'
+import type { ToPositions, ToSans } from './notation'
 
 /** Get all positions occupied by a color */
 export type OccupiedBy<
+C extends Color,
+Game extends ParsedGame,
+Remaining extends Index[] = Indices,
+Acc extends Index[] = []
+> = ToPositions<_OccupiedBy<C, Game, Remaining, Acc>>
+
+export type _OccupiedBy<
   C extends Color,
   Game extends ParsedGame,
   Remaining extends Index[] = Indices,
   Acc extends Index[] = []
 > = Remaining extends [infer Head extends Index, ...infer Tail extends Index[]]
   ? Game['board'][Head] extends FriendlyPiece<C>
-    ? OccupiedBy<C, Game, Tail, [...Acc, Head]>
-    : OccupiedBy<C, Game, Tail, Acc>
+    ? _OccupiedBy<C, Game, Tail, [...Acc, Head]>
+    : _OccupiedBy<C, Game, Tail, Acc>
   : Acc
 
 /** Get all possible moves, even ones that result in self-check */
 export type CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
-  Moves extends Index[] = OccupiedBy<Turn, Game>,
+  Moves extends Index[] = _OccupiedBy<Turn, Game>,
+  Acc extends Move[] = []
+> = _CurrentMovesUnsafe<Game, Turn, Moves, Acc> extends infer M extends Move[]
+  ? ToSans<M>
+  : never
+
+export type _CurrentMovesUnsafe<
+  Game extends ParsedGame,
+  Turn extends Color = Game['turn'],
+  Moves extends Index[] = _OccupiedBy<Turn, Game>,
   Acc extends Move[] = []
 > = Moves extends [infer Head extends Index, ...infer Tail extends Index[]]
   ? Game['board'][Head] extends infer CurrentPiece extends Piece
-    ? CurrentPiece extends 'p' | 'P' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...PawnMoves<Game, PieceColor<CurrentPiece>, Head>]>
-      : CurrentPiece extends 'n' | 'N' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KnightMoves<Game, PieceColor<CurrentPiece>, Head>]>
-      : CurrentPiece extends 'b' | 'B' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...BishopMoves<Game, PieceColor<CurrentPiece>, Head>]>
-      : CurrentPiece extends 'r' | 'R' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...RookMoves<Game, PieceColor<CurrentPiece>, Head>]>
-      : CurrentPiece extends 'q' | 'Q' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...QueenMoves<Game, PieceColor<CurrentPiece>, Head>]>
-      : CurrentPiece extends 'k' | 'K' ? CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KingMoves<Game, PieceColor<CurrentPiece>, Head>]>
+    ? CurrentPiece extends 'p' | 'P' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...PawnMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'n' | 'N' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KnightMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'b' | 'B' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...BishopMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'r' | 'R' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...RookMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'q' | 'Q' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...QueenMoves<Game, PieceColor<CurrentPiece>, Head>]>
+      : CurrentPiece extends 'k' | 'K' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KingMoves<Game, PieceColor<CurrentPiece>, Head>]>
       : never
     : never
   : Acc

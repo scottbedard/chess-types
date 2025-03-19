@@ -1,7 +1,4 @@
-import type {
-  Index,
-  Positions,
-} from './base'
+import type { Index } from './base'
 
 /** Test if string `T` includes string `U` */
 export type Includes<T extends string, U extends string> =
@@ -40,12 +37,4 @@ export type ToMoves<
   Acc extends unknown[] = []
 > = T extends [infer To extends Index, ...infer Tail extends Index[]]
   ? ToMoves<Tail, From, [...Acc, { from: From, to: To, promotion: '' }]>
-  : Acc
-
-/** Map indices to their named position */
-export type ToPositions<
-  T extends Index[],
-  Acc extends Positions[Index][] = []
-> = T extends [infer U extends Index, ...infer V extends Index[]]
-  ? ToPositions<V, [...Acc, Positions[U]]>
   : Acc

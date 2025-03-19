@@ -10,7 +10,7 @@ import type {
   Unoccupied,
 } from './base'
 
-import type { ToPositions } from '@/utils'
+import type { ToPositions } from '@/notation'
 
 /** Walk along the board, stopping short of friendly pieces */
 export type Walk<
