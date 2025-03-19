@@ -1,7 +1,7 @@
 {
   "author": "Scott Bedard",
   "bugs": {
-    "url": "https://github.com/scottbedard/chess.d.ts/issues"
+    "url": "https://github.com/scottbedard/chess-types/issues"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
@@ -20,15 +20,15 @@
     "/tsconfig.json",
     "LICENSE"
   ],
-  "homepage": "https://github.com/scottbedard/chess.d.ts#readme",
+  "homepage": "https://github.com/scottbedard/chess-types#readme",
   "keywords": [],
   "license": "MIT",
   "main": "dist/index.mjs",
   "module": "dist/index.mjs",
-  "name": "@bedard/chess.d.ts",
+  "name": "@bedard/chess-types",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scottbedard/chess.d.ts.git"
+    "url": "git+https://github.com/scottbedard/chess-types.git"
   },
   "scripts": {
     "build": "tsc --project ./tsconfig.json --emitDeclarationOnly && rollup --config rollup.config.mjs",
