@@ -1,6 +1,8 @@
-name: Test
+name: Release
 
-on: [push, pull_request]
+on:
+  release:
+    types: [created]
 
 jobs:
   test:
@@ -25,3 +27,8 @@ jobs:
 
       - name: Vitest
         run: pnpm test
+
+      - name: Release
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: pnpm publish --no-git-checks --access public
