@@ -7,11 +7,21 @@
 
 Welcome to a strange TypeScript exercise, our goal is to play chess inside the type system.
 
-[See my current progress here &rarr;](https://www.typescriptlang.org/play/?noErrorTruncation=true#code/JYWwDg9gTgLgBDAnmApnA3gKDjuB9AEWAGcwAbAQ0QHEKQUAabXABQqmJQDEUA7TAL5wAZlAgg4AcgACAIxQATdgoD0AYwAWKYsQC0SVMUmZMKlXDVQUFGGl4oA7nADmdNA+AwNcCiL6YDNFp6OABeODYObj4AHkkoXlkARwBrWV4oFTBsnOyVAA4CosKWUrLSlQAlADkAIQBFAGla6sq4J0b6lKS4XTgABjgARkkAPhMzFzdyKh8wYDgSOGIYYDIyRd4ELXboFOIGOFkAV3hPODAxWQpZMkR2tY2yCAgU5fEUL2BeZzgyYBSaC+B1M5g8Xm2aGOnCgFggvFWvGOFHW9woCgU31+AANqigAB4wACyEAAbihsQgIJDNmBTiJoDS1OI6bYoJJiHAQGSUAA6UEIZBoPGEknksIRSiIGLBRhwADakhQACYUAAWSSHXnagC64wFFF4CjgGh5sOBgtQVOWKCBO1kEGUASFcAAwlodA7lBLCCQZjQ3DK3KMgA)
+[Play with the chessboard &rarr;](https://www.typescriptlang.org/play/?noErrorTruncation=true#code/PQKhCgAIUgBAjApgEwIYCdnAMYAtEDOBAtAC4CeADoVDLZLqaZQQFzDADmAlqbgK7wAdNgD2AW2AExTJGkw58RMlRrRg4cN3GVR6UpArVIAb0gB9ACLcClADapyAcVTjEAGkiQAChgKIAMUQAO0gAX0gAM3QJSAByBBQMLDxCEiNCOM0OSGx0RFRSREhUSGDEAHdITldEcAzIFzdIAF4fP0CQgB449GD4AEcAa3hg9GBKSanJ4AAOOYX572WV5eAAJQA5ACEARQBpbc31yCr93aGByGJIAAZIAEY4gD5s4Gra+0dIG0gCUm4djsP1CfGKFT0QwInng-AMFUBwLs3CGiDs5EgdlEoiGmJRxT4NiE4ByYmCAOC-FQQIxqGQyG4wU4kAABptEAAPUgAWVEADdECzcvlCozmaUas0+QRDPhchJKIDEOgSRocg12VzeQLWj4HOQuk0PJAANpxRAAJkQABY4p4hA6ALqvVUMfnKwyiP6IYrwUTJeqqSAAYSUBD9yV1VhsX2ctUNtVeQA)
+
+I don't recommend using these for anything, but if you must...
+
+```sh
+pnpm install @bedard/chess-types
+
+yarn add @bedard/chess-types
+
+npm install @bedard/chess-types
+```
 
 ## Basic usage
 
-Games can be parsed and stringified using [Forsyth–Edwards Notation](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation) notation.
+Games can be parsed and stringified using Forsyth–Edwards Notation notation <sup>[more info &rarr;](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation)</sup>
 
 ```ts
 type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
