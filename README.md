@@ -1,7 +1,7 @@
-# `@bedard/chess.d.ts`
+# `@bedard/chess-types`
 
 [![Test](https://github.com/scottbedard/type-chess/actions/workflows/test.yml/badge.svg)](https://github.com/scottbedard/type-chess/actions/workflows/test.yml)
-[![NPM Version](https://img.shields.io/npm/v/%40bedard%2Fchess.d.ts)](https://www.npmjs.com/package/@bedard/chess.d.ts)
+[![NPM Version](https://img.shields.io/npm/v/%40bedard%2Fchess-types)](https://www.npmjs.com/package/@bedard/chess-types)
 
 
 A pointless exercise to implement a playable chess engine within the Typescript type system.
