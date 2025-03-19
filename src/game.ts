@@ -1,9 +1,37 @@
 /* eslint-disable @stylistic/no-multi-spaces */
-import { IsOdd } from './utils'
-import { ParsedGame, Piece, Index } from './base'
+import {
+  Color,
+  FriendlyPiece,
+  Index,
+  Indices,
+  ParsedGame,
+  Piece,
+} from './base'
+
+import type { IsOdd } from './utils'
+
+/** Get all positions occupied by a color */
+export type OccupiedBy<
+  C extends Color,
+  Game extends ParsedGame,
+  Remaining extends Index[] = Indices,
+  Acc extends Index[] = []
+> = Remaining extends [infer Head extends Index, ...infer Tail extends Index[]]
+  ? Game['board'][Head] extends FriendlyPiece<C>
+    ? OccupiedBy<C, Game, Tail, [...Acc, Head]>
+    : OccupiedBy<C, Game, Tail, Acc>
+  : Acc
+
+// export type ToMoves<
+//   T extends Index[],
+//   From extends Index,
+//   Acc extends unknown[] = []
+// > = T extends [infer To extends Index, ...infer Tail extends Index[]]
+//   ? ToMoves<Tail, From, [...Acc, { from: From, to: To, promotion: null }]>
+//   : Acc
 
 /** create a debuggable representation of the chessboard */
-export type Render<T extends ParsedGame> = {
+export type Chessboard<T extends ParsedGame> = {
   8: [` ${_W<T,  0>} ${_W<T,  1>} ${_W<T,  2>} ${_W<T,  3>} ${_W<T,  4>} ${_W<T,  5>} ${_W<T,  6>} ${_W<T,  7>} `],
   7: [` ${_B<T,  8>} ${_B<T,  9>} ${_B<T, 10>} ${_B<T, 11>} ${_B<T, 12>} ${_B<T, 13>} ${_B<T, 14>} ${_B<T, 15>} `],
   6: [` ${_W<T, 16>} ${_W<T, 17>} ${_W<T, 18>} ${_W<T, 19>} ${_W<T, 20>} ${_W<T, 21>} ${_W<T, 22>} ${_W<T, 23>} `],
