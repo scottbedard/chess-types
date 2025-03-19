@@ -11,6 +11,9 @@
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
   },
+  "files": [
+    "/dist"
+  ],
   "homepage": "https://github.com/scottbedard/chess.d.ts#readme",
   "keywords": [],
   "license": "MIT",
