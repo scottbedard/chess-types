@@ -22,11 +22,12 @@
     "url": "git+https://github.com/scottbedard/chess.d.ts.git"
   },
   "scripts": {
+    "build": "tsc --project ./tsconfig.json --emitDeclarationOnly",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
     "test": "vitest --typecheck"
   },
   "type": "module",
-  "types": "src/index.d.ts",
+  "types": "dist/index.d.ts",
   "version": "0.0.3"
 }

@@ -29,6 +29,9 @@ jobs:
       - name: Vitest
         run: pnpm test
 
+      - name: Build
+        run: pnpm build
+
       - name: Release
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
