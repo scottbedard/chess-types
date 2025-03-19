@@ -23,8 +23,8 @@
   "homepage": "https://github.com/scottbedard/chess.d.ts#readme",
   "keywords": [],
   "license": "MIT",
-  "main": "index.mjs",
-  "module": "index.mjs",
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
   "name": "@bedard/chess.d.ts",
   "repository": {
     "type": "git",
