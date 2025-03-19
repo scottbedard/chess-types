@@ -2,6 +2,7 @@ import { assertType, describe, test } from 'vitest'
 import type { PositionIndex } from '@/base'
 
 import type {
+  FormatBoard,
   FormatCastling,
   FormatGame,
   FormatSan,
@@ -11,27 +12,27 @@ import type {
   ParseSan,
 } from '@/notation'
 
-describe('FormatGame<T>', () => {
+describe('FormatBoard<T>', () => {
   test('initial position', () => {
-    type Result = FormatGame<'rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR'>
+    type Result = FormatBoard<'rnbqkbnrpppppppp________________________________PPPPPPPPRNBQKBNR'>
 
     assertType<Result>('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR')
   })
 
   test('empty board', () => {
-    type Result = FormatGame<'________________________________________________________________'>
+    type Result = FormatBoard<'________________________________________________________________'>
 
     assertType<Result>('8/8/8/8/8/8/8/8')
   })
 
   test('partially empty ranks', () => {
-    type Result = FormatGame<'p_______pp______ppp_____pppp____ppppp___pppppp__ppppppp_pppppppp'>
+    type Result = FormatBoard<'p_______pp______ppp_____pppp____ppppp___pppppp__ppppppp_pppppppp'>
 
     assertType<Result>('p7/pp6/ppp5/pppp4/ppppp3/pppppp2/ppppppp1/pppppppp')
   })
 
   test('error', () => {
-    type Result = FormatGame<'whoops'> extends never ? true : false
+    type Result = FormatBoard<'whoops'> extends never ? true : false
 
     assertType<Result>(true)
   })
@@ -54,6 +55,32 @@ describe('FormatCastling<T>', () => {
     type Result = FormatCastling<{ K: true, Q: false, k: true, q: false }>
 
     assertType<Result>('Kk')
+  })
+})
+
+describe('FormatGame<T>', () => {
+  test('starting position', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Result = FormatGame<Game>
+
+    assertType<Result>('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')
+  })
+
+  test('empty board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    type Result = FormatGame<Game>
+
+    assertType<Result>('8/8/8/8/8/8/8/8 w KQkq - 0 1')
+  })
+
+  test('en passant', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1'>
+
+    type Result = FormatGame<Game>
+
+    assertType<Result>('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1')
   })
 })
 

@@ -22,23 +22,35 @@ import type {
 } from './utils'
 
 /** Format parsed game to fen notation */
-export type FormatGame<T extends string> =
-  IsLength<T, 64> extends false ? never : _FormatGame<T>
+export type FormatGame<
+  T extends ParsedGame,
+  Board extends string = _FormatBoard<_ImplodeBoard<T['board']>>,
+> = `${Board} ${T['turn']} ${FormatCastling<T['castling']>} ${T['ep'] extends Index ? Positions[T['ep']] extends infer E extends Position ? E : '-' : '-'} ${T['halfmove']} ${T['fullmove']}`
 
-type _FormatGame<
+export type FormatBoard<T extends string> =
+  IsLength<T, 64> extends false ? never : _FormatBoard<T>
+
+type _ImplodeBoard<
+  T extends string[],
+  Acc extends string = ''
+> = T extends [infer Head extends string, ...infer Tail extends string[]]
+  ? _ImplodeBoard<Tail, `${Acc}${Head extends Piece ? Head : '_'}`>
+  : Acc
+
+type _FormatBoard<
   T extends string,
   Acc extends string = '',
   Count extends DirectionIndex = 0,
   Skip extends DirectionIndex = 0,
   Rank extends DirectionIndex = 0
 > = Count extends 8
-  ? _FormatGame<T, `${Acc}${Skip extends 0 ? '' : Skip}${Rank extends 7 ? '' : '/'}`, 0, 0, _Tick<Rank>>
+  ? _FormatBoard<T, `${Acc}${Skip extends 0 ? '' : Skip}${Rank extends 7 ? '' : '/'}`, 0, 0, _Tick<Rank>>
   : Skip extends 8
     ? never
     : T extends `${infer Head}${infer Tail}`
       ? Head extends Piece
-        ? _FormatGame<Tail, `${Acc}${Skip extends 0 ? '' : Skip}${Head}`, _Tick<Count>, 0, Rank>
-        : _FormatGame<Tail, Acc, _Tick<Count>, _Tick<Skip>, Rank>
+        ? _FormatBoard<Tail, `${Acc}${Skip extends 0 ? '' : Skip}${Head}`, _Tick<Count>, 0, Rank>
+        : _FormatBoard<Tail, Acc, _Tick<Count>, _Tick<Skip>, Rank>
       : Acc
 
 type _Tick<T extends DirectionIndex> =
