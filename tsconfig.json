@@ -10,7 +10,6 @@
     "paths": {
       "@/*": ["src/*"],
     },
-    "rootDir": "src",
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
