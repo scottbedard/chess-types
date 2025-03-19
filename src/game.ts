@@ -8,6 +8,7 @@ import {
   ParsedGame,
   Piece,
   PieceColor,
+  Positions,
 } from './base'
 
 import type { BishopMoves } from './pieces/bishop'
@@ -21,10 +22,10 @@ import type { ToPositions, ToSans } from './notation'
 
 /** Get all positions occupied by a color */
 export type OccupiedBy<
-C extends Color,
-Game extends ParsedGame,
-Remaining extends Index[] = Indices,
-Acc extends Index[] = []
+  C extends Color,
+  Game extends ParsedGame,
+  Remaining extends Index[] = Indices,
+  Acc extends Index[] = []
 > = ToPositions<_OccupiedBy<C, Game, Remaining, Acc>>
 
 export type _OccupiedBy<
@@ -82,3 +83,24 @@ type _B<Game extends ParsedGame,I extends Index> =
 
 type _W<Game extends ParsedGame, I extends Index> =
   Game['board'][I] extends infer U extends Piece ? U : IsOdd<I> extends true ? '-' : '*'
+
+/** Find king by color */
+export type FindKing<
+  Game extends ParsedGame,
+  C extends Color,
+  King extends Piece = C extends 'w' ? 'K' : 'k',
+  Remaining extends Index[] = Indices
+> = _FindKing<Game, C, King, Remaining> extends infer K extends Index
+  ? Positions[K]
+  : false
+
+export type _FindKing<
+  Game extends ParsedGame,
+  C extends Color,
+  King extends Piece = C extends 'w' ? 'K' : 'k',
+  Remaining extends Index[] = Indices
+> = Remaining extends [infer Head extends Index, ...infer Tail extends Index[]]
+  ? Game['board'][Head] extends King
+    ? Head
+    : _FindKing<Game, C, King, Tail>
+  : false
