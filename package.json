@@ -5,8 +5,12 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@rollup/plugin-typescript": "^12.1.2",
     "@stylistic/eslint-plugin": "^4.2.0",
+    "@types/node": "^22.13.10",
     "eslint": "^9.22.0",
+    "rollup": "^4.36.0",
+    "tslib": "^2.8.1",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.26.1",
     "vitest": "^3.0.8"
@@ -27,7 +31,7 @@
     "url": "git+https://github.com/scottbedard/chess.d.ts.git"
   },
   "scripts": {
-    "build": "tsc --project ./tsconfig.json --emitDeclarationOnly",
+    "build": "tsc --project ./tsconfig.json --emitDeclarationOnly && rollup --config rollup.config.mjs",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
     "test": "vitest --typecheck"
