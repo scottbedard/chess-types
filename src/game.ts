@@ -1,5 +1,5 @@
-import { IsOdd } from '@/utils'
-import { ParsedGame, Piece, Index } from '@/base'
+import { IsOdd } from './utils'
+import { ParsedGame, Piece, Index } from './base'
 
 export type _DisplayGame<T extends ParsedGame> = {
   8: [` ${_Light<T, 0>} ${_Light<T, 1>} ${_Light<T, 2>} ${_Light<T, 3>} ${_Light<T, 4>} ${_Light<T, 5>} ${_Light<T, 6>} ${_Light<T, 7>} `],

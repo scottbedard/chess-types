@@ -12,13 +12,13 @@ import type {
   PromotionPiece,
   Rank,
   Unoccupied,
-} from '@/base'
+} from './base'
 
 import type {
   Includes,
   Int,
   IsLength,
-} from '@/utils'
+} from './utils'
 
 /** Format parsed game to fen notation */
 export type FormatGame<T extends string> =

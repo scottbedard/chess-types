@@ -2,10 +2,10 @@ import type {
   Color,
   Index,
   ParsedGame,
-} from '@/base'
+} from '../base'
 
-import type { Walk } from '@/board'
-import type { ToMoves } from '@/utils'
+import type { Walk } from '../board'
+import type { ToMoves } from '../utils'
 
 export type QueenMoves<
   Game extends ParsedGame,

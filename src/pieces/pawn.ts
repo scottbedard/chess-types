@@ -7,9 +7,9 @@ import type {
   ParsedGame,
   ParsedMove,
   Unoccupied,
-} from '@/base'
+} from '../base'
 
-import { ToMoves } from '@/utils'
+import { ToMoves } from '../utils'
 
 export type PawnMoves<
   Game extends ParsedGame,

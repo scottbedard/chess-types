@@ -8,7 +8,7 @@ import type {
   PositionIndex,
   Positions,
   Unoccupied,
-} from '@/base'
+} from './base'
 
 import type { ToPositions } from '@/utils'
 

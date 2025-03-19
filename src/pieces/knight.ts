@@ -4,9 +4,9 @@ import type {
   Graph,
   Index,
   ParsedGame,
-} from '@/base'
+} from '../base'
 
-import type { ToMoves } from '@/utils'
+import type { ToMoves } from '../utils'
 
 export type KnightMoves<
   Game extends ParsedGame,
