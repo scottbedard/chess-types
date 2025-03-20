@@ -1,6 +1,14 @@
 import { assertType, describe, test } from 'vitest'
-import type { CurrentMovesUnsafe, FindKing, OccupiedBy } from '@/game'
 import type { ParseFen } from '@/notation'
+
+import type {
+  CurrentMovesUnsafe,
+  FindKing,
+  IsThreatened,
+  OccupiedBy,
+} from '@/game'
+
+import { PositionIndex } from '@/base'
 
 describe('OccupiedBy<Color, Game>', () => {
   test('empty board', () => {
@@ -96,5 +104,25 @@ describe('FindKing<Game, Color>', () => {
 
     assertType<Black>('e8')
     assertType<White>('e1')
+  })
+})
+
+describe('IsThreatened<Game, Color, Index>', () => {
+  test('empty board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    type Result = IsThreatened<Game, 0, 'w'>
+
+    assertType<Result>(false)
+  })
+
+  test('only threatened by color', () => {
+    type Game = ParseFen<'8/8/8/3R4/8/8/8/2b5 w - - 0 1'>
+
+    type White = IsThreatened<Game, PositionIndex['g5'], 'w'>
+    type Black = IsThreatened<Game, PositionIndex['g5'], 'b'>
+
+    assertType<White>(false)
+    assertType<Black>(true)
   })
 })

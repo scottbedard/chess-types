@@ -9,6 +9,9 @@ export type Rank = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
 /** Black or white */
 export type Color = 'b' | 'w'
 
+/** Enemy color */
+export type EnemyColor<T extends Color> = T extends 'b' ? 'w' : 'b'
+
 /** Black pieces */
 export type BlackPiece = 'r' | 'n' | 'b' | 'q' | 'k' | 'p'
 
