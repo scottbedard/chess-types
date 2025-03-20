@@ -4,10 +4,14 @@ import stylistic from '@stylistic/eslint-plugin'
 import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  tseslint.configs.recommended,
   {
     ignores: ['node_modules', 'dist'],
+  },
+
+  eslint.configs.recommended,
+  tseslint.configs.recommended,
+
+  {
     plugins: {
       '@stylistic': stylistic,
     },

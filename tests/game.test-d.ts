@@ -1,6 +1,5 @@
 import { assertType, describe, test } from 'vitest'
 import type { ParseFen } from '@/notation'
-import type { PositionIndex } from '@/base'
 
 import type {
   IsCheck,
@@ -149,7 +148,7 @@ describe('IsThreatened<Game, Color, Index>', () => {
   test('empty board', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
 
-    type Result = IsThreatened<Game, 0, 'w'>
+    type Result = IsThreatened<Game, 'a1', 'w'>
 
     assertType<Result>(false)
   })
@@ -157,8 +156,8 @@ describe('IsThreatened<Game, Color, Index>', () => {
   test('black obstructed', () => {
     type Game = ParseFen<'8/8/8/3R4/8/4P3/8/2b5 w - - 0 1'>
 
-    type ThreatenedByBlack = IsThreatened<Game, PositionIndex['g5'], 'b'>
-    type ThreatenedByWhite = IsThreatened<Game, PositionIndex['g5'], 'w'>
+    type ThreatenedByBlack = IsThreatened<Game, 'g5', 'b'>
+    type ThreatenedByWhite = IsThreatened<Game, 'g5', 'w'>
 
     assertType<ThreatenedByBlack>(false)
     assertType<ThreatenedByWhite>(true)
@@ -167,8 +166,8 @@ describe('IsThreatened<Game, Color, Index>', () => {
   test('white obstructed', () => {
     type Game = ParseFen<'8/8/8/3R1P2/8/8/8/2b5 w - - 0 1'>
 
-    type ThreatenedByBlack = IsThreatened<Game, PositionIndex['g5'], 'b'>
-    type ThreatenedByWhite = IsThreatened<Game, PositionIndex['g5'], 'w'>
+    type ThreatenedByBlack = IsThreatened<Game, 'g5', 'b'>
+    type ThreatenedByWhite = IsThreatened<Game, 'g5', 'w'>
 
     assertType<ThreatenedByBlack>(true)
     assertType<ThreatenedByWhite>(false)
@@ -177,8 +176,8 @@ describe('IsThreatened<Game, Color, Index>', () => {
   test('unreachable position', () => {
     type Game = ParseFen<'8/8/8/3R1P2/8/8/8/2b5 w - - 0 1'>
 
-    type ThreatenedByBlack = IsThreatened<Game, PositionIndex['a8'], 'b'>
-    type ThreatenedByWhite = IsThreatened<Game, PositionIndex['a8'], 'w'>
+    type ThreatenedByBlack = IsThreatened<Game, 'a8', 'b'>
+    type ThreatenedByWhite = IsThreatened<Game, 'a8', 'w'>
 
     assertType<ThreatenedByBlack>(false)
     assertType<ThreatenedByWhite>(false)
@@ -187,8 +186,8 @@ describe('IsThreatened<Game, Color, Index>', () => {
   test('threatened by pieces later in index', () => {
     type Game = ParseFen<'N7/4B3/8/8/8/8/8/2b5 w - - 0 1'>
 
-    type ThreatenedByBlack = IsThreatened<Game, PositionIndex['g5'], 'b'>
-    type ThreatenedByWhite = IsThreatened<Game, PositionIndex['g5'], 'w'>
+    type ThreatenedByBlack = IsThreatened<Game, 'g5', 'b'>
+    type ThreatenedByWhite = IsThreatened<Game, 'g5', 'w'>
 
     assertType<ThreatenedByBlack>(true)
     assertType<ThreatenedByWhite>(true)

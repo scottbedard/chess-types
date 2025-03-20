@@ -9,6 +9,8 @@ import type {
   ParsedGame,
   Piece,
   PieceColor,
+  Position,
+  PositionIndex,
   Positions,
 } from './base'
 
@@ -111,11 +113,18 @@ export type IsCheck<
   Game extends ParsedGame,
   KingColor extends Color = Game['turn'],
 > = _FindKing<Game, KingColor> extends infer KingIndex extends Index
-  ? IsThreatened<Game, KingIndex, EnemyColor<KingColor>>
+  ? _IsThreatened<Game, KingIndex, EnemyColor<KingColor>>
   : false
 
 /** Test if position is threatened by a hostile color */
 export type IsThreatened<
+  Game extends ParsedGame,
+  Target extends Position,
+  HostileColor extends Color = EnemyColor<Game['turn']>,
+  Acc extends Index[] = _OccupiedBy<Game, HostileColor>
+> = _IsThreatened<Game, PositionIndex[Target], HostileColor, Acc>
+
+export type _IsThreatened<
   Game extends ParsedGame,
   TargetIndex extends Index,
   HostileColor extends Color = EnemyColor<Game['turn']>,
@@ -125,7 +134,7 @@ export type IsThreatened<
     ? _CurrentMovesUnsafe<Game, HostileColor, [PositionHead]> extends infer PositionMoves extends Move[]
       ? _IsReachable<TargetIndex, PositionMoves> extends true
         ? true
-        : IsThreatened<Game, TargetIndex, HostileColor, PositionTail>
+        : _IsThreatened<Game, TargetIndex, HostileColor, PositionTail>
       : false
     : unknown
   : false
