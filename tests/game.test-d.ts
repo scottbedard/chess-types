@@ -1,36 +1,44 @@
 import { assertType, describe, test } from 'vitest'
-import type { CurrentMovesUnsafe, FindKing, _OccupiedBy } from '@/game'
+import type { CurrentMovesUnsafe, FindKing, OccupiedBy } from '@/game'
 import type { ParseFen } from '@/notation'
 
 describe('OccupiedBy<Color, Game>', () => {
   test('empty board', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
 
-    assertType<_OccupiedBy<'b', Game>>([])
-    assertType<_OccupiedBy<'w', Game>>([])
+    assertType<OccupiedBy<Game, 'b'>>([])
+    assertType<OccupiedBy<Game, 'w'>>([])
   })
 
   test('starting position', () => {
     type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
 
-    assertType<_OccupiedBy<'b', Game>>([
-      0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
+    type Black = OccupiedBy<Game, 'b'>
+
+    type White = OccupiedBy<Game, 'w'>
+
+    assertType<Black>([
+      'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7'
     ])
 
-    assertType<_OccupiedBy<'w', Game>>([
-      48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63
+    assertType<White>([
+      'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1'
     ])
   })
 
   test('mid-game position', () => {
     type Game = ParseFen<'2b3k1/6pp/4p3/2p5/4p3/4K3/P1P3PP/7R b - - 1 23'>
 
-    assertType<_OccupiedBy<'b', Game>>([
-      2, 6, 14, 15, 20, 26, 36
+    type Black = OccupiedBy<Game, 'b'>
+
+    type White = OccupiedBy<Game, 'w'>
+
+    assertType<Black>([
+      'c8', 'g8', 'g7', 'h7', 'e6', 'c5', 'e4'
     ])
 
-    assertType<_OccupiedBy<'w', Game>>([
-      44, 48, 50, 54, 55, 63
+    assertType<White>([
+      'e3', 'a2', 'c2', 'g2', 'h2', 'h1'
     ])
   })
 })

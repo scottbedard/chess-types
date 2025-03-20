@@ -22,28 +22,28 @@ import type { ToPositions, ToSans } from './notation'
 
 /** Get all positions occupied by a color */
 export type OccupiedBy<
-  C extends Color,
   Game extends ParsedGame,
+  C extends Color,
   Remaining extends Index[] = Indices,
   Acc extends Index[] = []
-> = ToPositions<_OccupiedBy<C, Game, Remaining, Acc>>
+> = ToPositions<_OccupiedBy<Game, C, Remaining, Acc>>
 
 export type _OccupiedBy<
-  C extends Color,
   Game extends ParsedGame,
+  C extends Color,
   Remaining extends Index[] = Indices,
   Acc extends Index[] = []
 > = Remaining extends [infer Head extends Index, ...infer Tail extends Index[]]
   ? Game['board'][Head] extends FriendlyPiece<C>
-    ? _OccupiedBy<C, Game, Tail, [...Acc, Head]>
-    : _OccupiedBy<C, Game, Tail, Acc>
+    ? _OccupiedBy<Game, C, Tail, [...Acc, Head]>
+    : _OccupiedBy<Game, C, Tail, Acc>
   : Acc
 
 /** Get all possible moves, even ones that result in self-check */
 export type CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
-  Moves extends Index[] = _OccupiedBy<Turn, Game>,
+  Moves extends Index[] = _OccupiedBy<Game, Turn>,
   Acc extends Move[] = []
 > = _CurrentMovesUnsafe<Game, Turn, Moves, Acc> extends infer M extends Move[]
   ? ToSans<M>
@@ -52,7 +52,7 @@ export type CurrentMovesUnsafe<
 export type _CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
-  Moves extends Index[] = _OccupiedBy<Turn, Game>,
+  Moves extends Index[] = _OccupiedBy<Game, Turn>,
   Acc extends Move[] = []
 > = Moves extends [infer Head extends Index, ...infer Tail extends Index[]]
   ? Game['board'][Head] extends infer CurrentPiece extends Piece
