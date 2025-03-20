@@ -1,5 +1,5 @@
 /* eslint-disable @stylistic/no-multi-spaces */
-import {
+import type {
   Color,
   EnemyColor,
   FriendlyPiece,
@@ -106,22 +106,28 @@ export type _FindKing<
     : _FindKing<Game, C, King, Tail>
   : false
 
-/** Test if positions contain an (unsafe) move to position */
+/** Test if a king is threatened */
+export type IsCheck<
+  Game extends ParsedGame,
+  KingColor extends Color = Game['turn'],
+> = _FindKing<Game, KingColor> extends infer KingIndex extends Index
+  ? IsThreatened<Game, KingIndex, EnemyColor<KingColor>>
+  : false
+
+/** Test if position is threatened by a hostile color */
 export type IsThreatened<
   Game extends ParsedGame,
   TargetIndex extends Index,
   HostileColor extends Color = EnemyColor<Game['turn']>,
   Acc extends Index[] = _OccupiedBy<Game, HostileColor>
-> = Acc extends [infer Head extends Index, ...infer Tail extends Index[]]
-  ? Game['board'][Head] extends HostileColor
-    ? _OccupiedBy<Game, HostileColor> extends infer HostilePositions extends Index[]
-      ? _CurrentMovesUnsafe<Game, HostileColor, HostilePositions> extends infer HostileMoves extends Move[]
-        ? _IsReachable<TargetIndex, HostileMoves> extends true
-          ? true
-          : IsThreatened<Game, TargetIndex, HostileColor, Tail>
-        : IsThreatened<Game, TargetIndex, HostileColor, Tail>
+> = Acc extends [infer PositionHead extends Index, ...infer PositionTail extends Index[]]
+  ? Game['board'][PositionHead] extends FriendlyPiece<HostileColor>
+    ? _CurrentMovesUnsafe<Game, HostileColor, [PositionHead]> extends infer PositionMoves extends Move[]
+      ? _IsReachable<TargetIndex, PositionMoves> extends true
+        ? true
+        : IsThreatened<Game, TargetIndex, HostileColor, PositionTail>
       : false
-    : false
+    : unknown
   : false
 
 type _IsReachable<
