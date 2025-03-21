@@ -6,6 +6,12 @@ export type Includes<T extends string, U extends string> =
     ? true
     : false
 
+/** Increment number `T` */
+export type Increment<T extends number, Acc extends unknown[] = []> =
+  Acc['length'] extends T
+    ? [...Acc, unknown]['length']
+    : Increment<T, [...Acc, unknown]>
+
 /** Convert positive string integer `T` to `number` */
 export type Int<T extends string> =
   `${T}` extends `-${string}` | `${string}.${string}`
