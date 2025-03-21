@@ -2,6 +2,7 @@ import { assertType, describe, test } from 'vitest'
 import type { ParseFen } from '@/notation'
 
 import type {
+  ApplyMoveUnsafe,
   Chessboard,
   CurrentMovesUnsafe,
   FindKing,
@@ -9,6 +10,20 @@ import type {
   IsThreatened,
   OccupiedBy,
 } from '@/game'
+
+describe('ApplyMoveUnsafe<Game, San>', () => {
+  test('never if unoccupied', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    type Result = ApplyMoveUnsafe<Game, 'a1a2'> extends never ? true : false
+
+    assertType<Result>(true)
+  })
+
+  test.skip('e2e4', () => {
+    // ...
+  })
+})
 
 describe('Chessboard', () => {
   test('empty board', () => {

@@ -30,6 +30,21 @@ import type { QueenMoves } from './pieces/queen'
 import type { RookMoves } from './pieces/rook'
 
 /**
+ * Apply move to a game, regardless of turn or legality
+ */
+export type ApplyMoveUnsafe<
+  Game extends ParsedGame,
+  San extends string
+> = _ApplyMoveUnsafe<Game, ParseSan<San>>
+
+type _ApplyMoveUnsafe<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['board'][Move['from']] extends infer P extends Piece
+  ? P
+  : never
+
+/**
  * Get all possible moves, even ones that result in self-check
  **/
 export type CurrentMovesUnsafe<
