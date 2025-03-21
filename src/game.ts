@@ -3,6 +3,7 @@ import type {
   Color,
   EnemyColor,
   FriendlyPiece,
+  Graph,
   Index,
   Indices,
   MaybePiece,
@@ -75,7 +76,7 @@ type _CountFullmove<
 
 type _UpdateBoard<
   Game extends ParsedGame,
-  MovingPiece extends Piece,
+  P extends Piece,
   Move extends ParsedMove,
 > = _IsWhiteCastleShort<Game, Move> extends true  ? _ReplaceValues<Game['board'], [
     [60, Unoccupied],
@@ -101,11 +102,30 @@ type _UpdateBoard<
     [3, 'r'],
     [4, Unoccupied],
   ]>
-  : Game['ep'] extends Index
-    ? never // @todo, clear en passant piece on pawn capture
+  : Game['ep'] extends Move['to']
+    ? P extends 'p'
+      ? Graph[Move['to']][1] extends Index
+        ? _ReplaceValues<Game['board'], [
+          [Move['from'], Unoccupied],
+          [Move['to'], P],
+          [Graph[Move['to']][1], Unoccupied]
+        ]>
+        : never
+      : P extends 'P'
+        ? Graph[Move['to']][7] extends Index
+          ? _ReplaceValues<Game['board'], [
+            [Move['from'], Unoccupied],
+            [Move['to'], P],
+            [Graph[Move['to']][7], Unoccupied]
+          ]>
+          : never
+        : _ReplaceValues<Game['board'], [
+          [Move['from'], Unoccupied],
+          [Move['to'], P],
+        ]>
     : _ReplaceValues<Game['board'], [
       [Move['from'], Unoccupied],
-      [Move['to'], MovingPiece],
+      [Move['to'], P],
     ]>
 
 type _UpdateCastling<

@@ -148,6 +148,22 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
 
     assertType<Move2['ep']>(null)
   })
+
+  test('capture en passant white', () => {
+    type Game = ParseFen<'8/8/8/3pP3/8/8/8/8 w - d6 0 2'>
+
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e5d6'>>
+
+    assertType<Result>('8/8/3P4/8/8/8/8/8 b - - 0 2')
+  })
+
+  test('capture en passant black', () => {
+    type Game = ParseFen<'8/8/8/8/3Pp3/8/8/8 b - d3 0 1'>
+
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e4d3'>>
+
+    assertType<Result>('8/8/8/8/8/3p4/8/8 w - - 0 2')
+  })
 })
 
 describe('Chessboard', () => {
