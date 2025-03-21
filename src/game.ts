@@ -8,12 +8,12 @@ import type {
   Move,
   ParsedGame,
   ParsedMove,
-  Unoccupied,
   Piece,
   PieceColor,
   Position,
   PositionIndex,
   Positions,
+  Unoccupied,
 } from './base'
 
 import type {
@@ -21,6 +21,8 @@ import type {
   ToPositions,
   ToSans,
 } from './notation'
+
+import type { Increment } from './utils'
 
 import type { BishopMoves } from './pieces/bishop'
 import type { KingMoves } from './pieces/king'
@@ -40,8 +42,15 @@ export type ApplyMoveUnsafe<
 type _ApplyMoveUnsafe<
   Game extends ParsedGame,
   Move extends ParsedMove,
-> = Game['board'][Move['from']] extends infer P extends Piece
-  ? P
+> = Game['board'][Move['from']] extends infer MovingPiece extends Piece
+  ? {
+    board: Game['board'],
+    turn: EnemyColor<PieceColor<MovingPiece>>
+    halfmove: Game['halfmove']
+    fullmove: Game['fullmove']
+    castling: Game['castling']
+    ep: Game['ep']
+  }
   : never
 
 /**

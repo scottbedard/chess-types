@@ -20,8 +20,16 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
     assertType<Result>(true)
   })
 
-  test.skip('e2e4', () => {
-    // ...
+  test('alternate color', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type WhiteMoved = ApplyMoveUnsafe<Game, 'e2e4'>
+
+    assertType<WhiteMoved['turn']>('b')
+
+    type BlackMoved = ApplyMoveUnsafe<WhiteMoved, 'e7e5'>
+
+    assertType<BlackMoved['turn']>('w')
   })
 })
 
