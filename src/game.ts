@@ -61,8 +61,8 @@ type _CountHalfmove<
 > = P extends 'p' | 'P'
   ? 0
   : Game['board'][Move['to']] extends Piece
-      ? 0
-      : Increment<Game['halfmove']>
+    ? 0
+    : Increment<Game['halfmove']>
 
 type _CountFullmove<
   Game extends ParsedGame,
@@ -78,11 +78,11 @@ type _UpdateBoard<
   MovingPiece extends Piece,
   Move extends ParsedMove,
 > = _IsWhiteCastleShort<Game, Move> extends true  ? _ReplaceValues<Game['board'], [
-      [60, Unoccupied],
-      [61, 'R'],
-      [62, 'K'],
-      [63, Unoccupied],
-    ]>
+    [60, Unoccupied],
+    [61, 'R'],
+    [62, 'K'],
+    [63, Unoccupied],
+  ]>
   : _IsWhiteCastleLong<Game, Move> extends true ? _ReplaceValues<Game['board'], [
     [56, Unoccupied],
     [58, 'K'],
