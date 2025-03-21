@@ -176,14 +176,14 @@ export type Chessboard<
 > =
   Flipped extends true
     ? {
-      8: ` ${_Square<T, 63, _W>} ${_Square<T, 62, _B>} ${_Square<T, 61, _W>} ${_Square<T, 60, _B>} ${_Square<T, 59, _W>} ${_Square<T, 58, _B>} ${_Square<T, 57, _W>} ${_Square<T, 56, _B>} `,
-      7: ` ${_Square<T, 55, _B>} ${_Square<T, 54, _W>} ${_Square<T, 53, _B>} ${_Square<T, 52, _W>} ${_Square<T, 51, _B>} ${_Square<T, 50, _W>} ${_Square<T, 49, _B>} ${_Square<T, 48, _W>} `,
-      6: ` ${_Square<T, 47, _W>} ${_Square<T, 46, _B>} ${_Square<T, 45, _W>} ${_Square<T, 44, _B>} ${_Square<T, 43, _W>} ${_Square<T, 42, _B>} ${_Square<T, 41, _W>} ${_Square<T, 40, _B>} `,
-      5: ` ${_Square<T, 39, _B>} ${_Square<T, 38, _W>} ${_Square<T, 37, _B>} ${_Square<T, 36, _W>} ${_Square<T, 35, _B>} ${_Square<T, 34, _W>} ${_Square<T, 33, _B>} ${_Square<T, 32, _W>} `,
-      4: ` ${_Square<T, 31, _W>} ${_Square<T, 30, _B>} ${_Square<T, 29, _W>} ${_Square<T, 28, _B>} ${_Square<T, 27, _W>} ${_Square<T, 26, _B>} ${_Square<T, 25, _W>} ${_Square<T, 24, _B>} `,
-      3: ` ${_Square<T, 23, _B>} ${_Square<T, 22, _W>} ${_Square<T, 21, _B>} ${_Square<T, 20, _W>} ${_Square<T, 19, _B>} ${_Square<T, 18, _W>} ${_Square<T, 17, _B>} ${_Square<T, 16, _W>} `,
-      2: ` ${_Square<T, 15, _W>} ${_Square<T, 14, _B>} ${_Square<T, 13, _W>} ${_Square<T, 12, _B>} ${_Square<T, 11, _W>} ${_Square<T, 10, _B>} ${_Square<T,  9, _W>} ${_Square<T,  8, _B>} `,
-      1: ` ${_Square<T,  7, _B>} ${_Square<T,  6, _W>} ${_Square<T,  5, _B>} ${_Square<T,  4, _W>} ${_Square<T,  3, _B>} ${_Square<T,  2, _W>} ${_Square<T,  1, _B>} ${_Square<T,  0, _W>} `,
+      1: ` ${_Square<T, 63, _W>} ${_Square<T, 62, _B>} ${_Square<T, 61, _W>} ${_Square<T, 60, _B>} ${_Square<T, 59, _W>} ${_Square<T, 58, _B>} ${_Square<T, 57, _W>} ${_Square<T, 56, _B>} `,
+      2: ` ${_Square<T, 55, _B>} ${_Square<T, 54, _W>} ${_Square<T, 53, _B>} ${_Square<T, 52, _W>} ${_Square<T, 51, _B>} ${_Square<T, 50, _W>} ${_Square<T, 49, _B>} ${_Square<T, 48, _W>} `,
+      3: ` ${_Square<T, 47, _W>} ${_Square<T, 46, _B>} ${_Square<T, 45, _W>} ${_Square<T, 44, _B>} ${_Square<T, 43, _W>} ${_Square<T, 42, _B>} ${_Square<T, 41, _W>} ${_Square<T, 40, _B>} `,
+      4: ` ${_Square<T, 39, _B>} ${_Square<T, 38, _W>} ${_Square<T, 37, _B>} ${_Square<T, 36, _W>} ${_Square<T, 35, _B>} ${_Square<T, 34, _W>} ${_Square<T, 33, _B>} ${_Square<T, 32, _W>} `,
+      5: ` ${_Square<T, 31, _W>} ${_Square<T, 30, _B>} ${_Square<T, 29, _W>} ${_Square<T, 28, _B>} ${_Square<T, 27, _W>} ${_Square<T, 26, _B>} ${_Square<T, 25, _W>} ${_Square<T, 24, _B>} `,
+      6: ` ${_Square<T, 23, _B>} ${_Square<T, 22, _W>} ${_Square<T, 21, _B>} ${_Square<T, 20, _W>} ${_Square<T, 19, _B>} ${_Square<T, 18, _W>} ${_Square<T, 17, _B>} ${_Square<T, 16, _W>} `,
+      7: ` ${_Square<T, 15, _W>} ${_Square<T, 14, _B>} ${_Square<T, 13, _W>} ${_Square<T, 12, _B>} ${_Square<T, 11, _W>} ${_Square<T, 10, _B>} ${_Square<T,  9, _W>} ${_Square<T,  8, _B>} `,
+      8: ` ${_Square<T,  7, _B>} ${_Square<T,  6, _W>} ${_Square<T,  5, _B>} ${_Square<T,  4, _W>} ${_Square<T,  3, _B>} ${_Square<T,  2, _W>} ${_Square<T,  1, _B>} ${_Square<T,  0, _W>} `,
     }
     : {
       8: ` ${_Square<T,  0, _W>} ${_Square<T,  1, _B>} ${_Square<T,  2, _W>} ${_Square<T,  3, _B>} ${_Square<T,  4, _W>} ${_Square<T,  5, _B>} ${_Square<T,  6, _W>} ${_Square<T,  7, _B>} `,
