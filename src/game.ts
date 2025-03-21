@@ -46,8 +46,14 @@ type _ApplyMoveUnsafe<
   ? {
     board: Game['board'],
     turn: EnemyColor<PieceColor<MovingPiece>>
-    halfmove: Game['halfmove']
-    fullmove: Game['fullmove']
+    halfmove: MovingPiece extends 'p' | 'P'
+      ? 0
+      : Game['board'][Move['to']] extends Piece
+          ? 0
+          : Increment<Game['halfmove']>
+    fullmove: PieceColor<MovingPiece> extends 'b'
+      ? Increment<Game['fullmove']>
+      : Game['fullmove']
     castling: Game['castling']
     ep: Game['ep']
   }

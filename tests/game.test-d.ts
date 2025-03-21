@@ -31,6 +31,28 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
 
     assertType<BlackMoved['turn']>('w')
   })
+
+  test('counts halfmove', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    assertType<Game['halfmove']>(0)
+
+    type Move1 = ApplyMoveUnsafe<Game, 'b1c3'>
+
+    assertType<Move1['halfmove']>(1)
+
+    type Move2 = ApplyMoveUnsafe<Move1, 'e2e4'>
+
+    assertType<Move2['halfmove']>(0)
+
+    type Move3 = ApplyMoveUnsafe<Move2, 'e7e5'>
+
+    assertType<Move3['halfmove']>(0)
+
+    type Move4 = ApplyMoveUnsafe<Move3, 'g8f6'>
+
+    assertType<Move4['halfmove']>(1)
+  })
 })
 
 describe('Chessboard', () => {
