@@ -50,7 +50,7 @@ type _ApplyMoveUnsafe<
     halfmove: _CountHalfmove<Game, P, Move>
     fullmove: _CountFullmove<Game, P>
     castling: _UpdateCastling<Game, Move>
-    ep: Game['ep']
+    ep: _UpdateEnPassant<P, Move>
   }
   : never
 
@@ -115,6 +115,32 @@ type _UpdateCastling<
   k: _IsBlackCastleShort<Game, Move> extends true ? false : Game['castling']['k'],
   q: _IsBlackCastleLong<Game, Move> extends true ? false : Game['castling']['q'],
 }
+
+type _UpdateEnPassant<
+  P extends Piece,
+  Move extends ParsedMove,
+> =
+  P extends 'p'
+    ? Move['from'] extends 8 ? Move['to'] extends 24 ? 16 : null
+    : Move['from'] extends 9 ? Move['to'] extends 25 ? 17 : null
+    : Move['from'] extends 10 ? Move['to'] extends  26 ? 18 : null
+    : Move['from'] extends 11 ? Move['to'] extends  27 ? 19 : null
+    : Move['from'] extends 12 ? Move['to'] extends  28 ? 20 : null
+    : Move['from'] extends 13 ? Move['to'] extends  29 ? 21 : null
+    : Move['from'] extends 14 ? Move['to'] extends  30 ? 22 : null
+    : Move['from'] extends 15 ? Move['to'] extends  31 ? 23 : null
+    : null
+  : P extends 'P'
+    ? Move['from'] extends 48 ? Move['to'] extends 32 ? 40 : null
+    : Move['from'] extends 49 ? Move['to'] extends 33 ? 41 : null
+    : Move['from'] extends 50 ? Move['to'] extends 34 ? 42 : null
+    : Move['from'] extends 51 ? Move['to'] extends 35 ? 43 : null
+    : Move['from'] extends 52 ? Move['to'] extends 36 ? 44 : null
+    : Move['from'] extends 53 ? Move['to'] extends 37 ? 45 : null
+    : Move['from'] extends 54 ? Move['to'] extends 38 ? 46 : null
+    : Move['from'] extends 55 ? Move['to'] extends 39 ? 47 : null
+    : null
+  : null
 
 export type _ReplaceValues<
   T extends MaybePiece[],

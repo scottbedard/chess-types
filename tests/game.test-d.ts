@@ -1,5 +1,6 @@
 import { assertType, describe, test } from 'vitest'
 import type { FormatGame, ParseFen } from '@/notation'
+import type { Positions } from '@/base'
 
 import type {
   ApplyMoveUnsafe,
@@ -95,6 +96,58 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
 
     assertType<Result>('2kr4/8/8/8/8/8/8/8 w - - 1 2')
   })
+
+  test('set en passant', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type A3 = Positions[ApplyMoveUnsafe<Game, 'a2a4'>['ep']]
+    type B3 = Positions[ApplyMoveUnsafe<Game, 'b2b4'>['ep']]
+    type C3 = Positions[ApplyMoveUnsafe<Game, 'c2c4'>['ep']]
+    type D3 = Positions[ApplyMoveUnsafe<Game, 'd2d4'>['ep']]
+    type E3 = Positions[ApplyMoveUnsafe<Game, 'e2e4'>['ep']]
+    type F3 = Positions[ApplyMoveUnsafe<Game, 'f2f4'>['ep']]
+    type G3 = Positions[ApplyMoveUnsafe<Game, 'g2g4'>['ep']]
+    type H3 = Positions[ApplyMoveUnsafe<Game, 'h2h4'>['ep']]
+
+    type A6 = Positions[ApplyMoveUnsafe<Game, 'a7a5'>['ep']]
+    type B6 = Positions[ApplyMoveUnsafe<Game, 'b7b5'>['ep']]
+    type C6 = Positions[ApplyMoveUnsafe<Game, 'c7c5'>['ep']]
+    type D6 = Positions[ApplyMoveUnsafe<Game, 'd7d5'>['ep']]
+    type E6 = Positions[ApplyMoveUnsafe<Game, 'e7e5'>['ep']]
+    type F6 = Positions[ApplyMoveUnsafe<Game, 'f7f5'>['ep']]
+    type G6 = Positions[ApplyMoveUnsafe<Game, 'g7g5'>['ep']]
+    type H6 = Positions[ApplyMoveUnsafe<Game, 'h7h5'>['ep']]
+
+    assertType<A3>('a3')
+    assertType<B3>('b3')
+    assertType<C3>('c3')
+    assertType<D3>('d3')
+    assertType<E3>('e3')
+    assertType<F3>('f3')
+    assertType<G3>('g3')
+    assertType<H3>('h3')
+
+    assertType<A6>('a6')
+    assertType<B6>('b6')
+    assertType<C6>('c6')
+    assertType<D6>('d6')
+    assertType<E6>('e6')
+    assertType<F6>('f6')
+    assertType<G6>('g6')
+    assertType<H6>('h6')
+  })
+
+  test('clear en passant', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Move1 = ApplyMoveUnsafe<Game, 'e2e4'>
+
+    assertType<Positions[Move1['ep']]>('e3')
+
+    type Move2 = ApplyMoveUnsafe<Move1, 'b8c6'>
+
+    assertType<Move2['ep']>(null)
+  })
 })
 
 describe('Chessboard', () => {
@@ -117,14 +170,14 @@ describe('Chessboard', () => {
     })
 
     assertType<Black>({
-      8: ' - * - * - * - * ',
-      7: ' * - * - * - * - ',
-      6: ' - * - * - * - * ',
-      5: ' * - * - * - * - ',
-      4: ' - * - * - * - * ',
-      3: ' * - * - * - * - ',
-      2: ' - * - * - * - * ',
-      1: ' * - * - * - * - ',
+      1: ' - * - * - * - * ',
+      2: ' * - * - * - * - ',
+      3: ' - * - * - * - * ',
+      4: ' * - * - * - * - ',
+      5: ' - * - * - * - * ',
+      6: ' * - * - * - * - ',
+      7: ' - * - * - * - * ',
+      8: ' * - * - * - * - ',
     })
   })
 
@@ -147,14 +200,14 @@ describe('Chessboard', () => {
     })
 
     assertType<Black>({
-        8: ' R N B K Q B N R ',
-        7: ' P P P P P P P P ',
-        6: ' - * - * - * - * ',
-        5: ' * - * - * - * - ',
-        4: ' - * - * - * - * ',
-        3: ' * - * - * - * - ',
-        2: ' p p p p p p p p ',
-        1: ' r n b k q b n r ',
+      1: ' R N B K Q B N R ',
+      2: ' P P P P P P P P ',
+      3: ' - * - * - * - * ',
+      4: ' * - * - * - * - ',
+      5: ' - * - * - * - * ',
+      6: ' * - * - * - * - ',
+      7: ' p p p p p p p p ',
+      8: ' r n b k q b n r ',
     })
   })
 })
