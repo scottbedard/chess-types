@@ -15,7 +15,6 @@ import type {
 } from './base'
 
 import type { BishopMoves } from './pieces/bishop'
-import type { IsOdd } from './utils'
 import type { KingMoves } from './pieces/king'
 import type { KnightMoves } from './pieces/knight'
 import type { PawnMoves } from './pieces/pawn'
@@ -71,21 +70,25 @@ export type _CurrentMovesUnsafe<
 
 /** create a debuggable representation of the chessboard */
 export type Chessboard<T extends ParsedGame> = {
-  8: [` ${_W<T,  0>} ${_W<T,  1>} ${_W<T,  2>} ${_W<T,  3>} ${_W<T,  4>} ${_W<T,  5>} ${_W<T,  6>} ${_W<T,  7>} `],
-  7: [` ${_B<T,  8>} ${_B<T,  9>} ${_B<T, 10>} ${_B<T, 11>} ${_B<T, 12>} ${_B<T, 13>} ${_B<T, 14>} ${_B<T, 15>} `],
-  6: [` ${_W<T, 16>} ${_W<T, 17>} ${_W<T, 18>} ${_W<T, 19>} ${_W<T, 20>} ${_W<T, 21>} ${_W<T, 22>} ${_W<T, 23>} `],
-  5: [` ${_B<T, 24>} ${_B<T, 25>} ${_B<T, 26>} ${_B<T, 27>} ${_B<T, 28>} ${_B<T, 29>} ${_B<T, 30>} ${_B<T, 31>} `],
-  4: [` ${_W<T, 32>} ${_W<T, 33>} ${_W<T, 34>} ${_W<T, 35>} ${_W<T, 36>} ${_W<T, 37>} ${_W<T, 38>} ${_W<T, 39>} `],
-  3: [` ${_B<T, 40>} ${_B<T, 41>} ${_B<T, 42>} ${_B<T, 43>} ${_B<T, 44>} ${_B<T, 45>} ${_B<T, 46>} ${_B<T, 47>} `],
-  2: [` ${_W<T, 48>} ${_W<T, 49>} ${_W<T, 50>} ${_W<T, 51>} ${_W<T, 52>} ${_W<T, 53>} ${_W<T, 54>} ${_W<T, 55>} `],
-  1: [` ${_B<T, 56>} ${_B<T, 57>} ${_B<T, 58>} ${_B<T, 59>} ${_B<T, 60>} ${_B<T, 61>} ${_B<T, 62>} ${_B<T, 63>} `],
+  8: ` ${_Square<T,  0, _White>} ${_Square<T,  1, _Black>} ${_Square<T,  2, _White>} ${_Square<T,  3, _Black>} ${_Square<T,  4, _White>} ${_Square<T,  5, _Black>} ${_Square<T,  6, _White>} ${_Square<T,  7, _Black>} `,
+  7: ` ${_Square<T,  8, _Black>} ${_Square<T,  9, _White>} ${_Square<T, 10, _Black>} ${_Square<T, 11, _White>} ${_Square<T, 12, _Black>} ${_Square<T, 13, _White>} ${_Square<T, 14, _Black>} ${_Square<T, 15, _White>} `,
+  6: ` ${_Square<T, 16, _White>} ${_Square<T, 17, _Black>} ${_Square<T, 18, _White>} ${_Square<T, 19, _Black>} ${_Square<T, 20, _White>} ${_Square<T, 21, _Black>} ${_Square<T, 22, _White>} ${_Square<T, 23, _Black>} `,
+  5: ` ${_Square<T, 24, _Black>} ${_Square<T, 25, _White>} ${_Square<T, 26, _Black>} ${_Square<T, 27, _White>} ${_Square<T, 28, _Black>} ${_Square<T, 29, _White>} ${_Square<T, 30, _Black>} ${_Square<T, 31, _White>} `,
+  4: ` ${_Square<T, 32, _White>} ${_Square<T, 33, _Black>} ${_Square<T, 34, _White>} ${_Square<T, 35, _Black>} ${_Square<T, 36, _White>} ${_Square<T, 37, _Black>} ${_Square<T, 38, _White>} ${_Square<T, 39, _Black>} `,
+  3: ` ${_Square<T, 40, _Black>} ${_Square<T, 41, _White>} ${_Square<T, 42, _Black>} ${_Square<T, 43, _White>} ${_Square<T, 44, _Black>} ${_Square<T, 45, _White>} ${_Square<T, 46, _Black>} ${_Square<T, 47, _White>} `,
+  2: ` ${_Square<T, 48, _White>} ${_Square<T, 49, _Black>} ${_Square<T, 50, _White>} ${_Square<T, 51, _Black>} ${_Square<T, 52, _White>} ${_Square<T, 53, _Black>} ${_Square<T, 54, _White>} ${_Square<T, 55, _Black>} `,
+  1: ` ${_Square<T, 56, _Black>} ${_Square<T, 57, _White>} ${_Square<T, 58, _Black>} ${_Square<T, 59, _White>} ${_Square<T, 60, _Black>} ${_Square<T, 61, _White>} ${_Square<T, 62, _Black>} ${_Square<T, 63, _White>} `,
 }
 
-type _B<Game extends ParsedGame,I extends Index> =
-  Game['board'][I] extends infer U extends Piece ? U : IsOdd<I> extends true ? '*' : '-'
+type _Black = '*'
 
-type _W<Game extends ParsedGame, I extends Index> =
-  Game['board'][I] extends infer U extends Piece ? U : IsOdd<I> extends true ? '-' : '*'
+type _White = '-'
+
+type _Square<
+  Game extends ParsedGame,
+  I extends Index,
+  Char extends _Black | _White
+> = Game['board'][I] extends infer P extends Piece ? P : Char
 
 /** Find king by color */
 export type FindKing<

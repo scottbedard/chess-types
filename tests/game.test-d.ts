@@ -2,12 +2,49 @@ import { assertType, describe, test } from 'vitest'
 import type { ParseFen } from '@/notation'
 
 import type {
-  IsCheck,
+  Chessboard,
   CurrentMovesUnsafe,
   FindKing,
+  IsCheck,
   IsThreatened,
   OccupiedBy,
 } from '@/game'
+
+describe('Chessboard', () => {
+  test('empty board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    type Result = Chessboard<Game>
+
+    assertType<Result>({
+      8: ' - * - * - * - * ',
+      7: ' * - * - * - * - ',
+      6: ' - * - * - * - * ',
+      5: ' * - * - * - * - ',
+      4: ' - * - * - * - * ',
+      3: ' * - * - * - * - ',
+      2: ' - * - * - * - * ',
+      1: ' * - * - * - * - ',
+    })
+  })
+
+  test('starting position', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Result = Chessboard<Game>
+
+    assertType<Result>({
+      8: ' r n b q k b n r ',
+      7: ' p p p p p p p p ',
+      6: ' - * - * - * - * ',
+      5: ' * - * - * - * - ',
+      4: ' - * - * - * - * ',
+      3: ' * - * - * - * - ',
+      2: ' P P P P P P P P ',
+      1: ' R N B Q K B N R ',
+    })
+  })
+})
 
 describe('OccupiedBy<Color, Game>', () => {
   test('empty board', () => {
