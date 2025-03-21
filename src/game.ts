@@ -101,10 +101,12 @@ type _UpdateBoard<
     [3, 'r'],
     [4, Unoccupied],
   ]>
-  : _ReplaceValues<Game['board'], [
-    [Move['from'], Unoccupied],
-    [Move['to'], MovingPiece],
-  ]>
+  : Game['ep'] extends Index
+    ? never // @todo, clear en passant piece on pawn capture
+    : _ReplaceValues<Game['board'], [
+      [Move['from'], Unoccupied],
+      [Move['to'], MovingPiece],
+    ]>
 
 type _UpdateCastling<
   Game extends ParsedGame,
