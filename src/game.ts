@@ -49,7 +49,7 @@ type _ApplyMoveUnsafe<
     turn: EnemyColor<PieceColor<P>>
     halfmove: _CountHalfmove<Game, P, Move>
     fullmove: _CountFullmove<Game, P>
-    castling: Game['castling']
+    castling: _UpdateCastling<Game, Move>
     ep: Game['ep']
   }
   : never
@@ -82,6 +82,16 @@ type _UpdateBoard<
   Move['to'],
   MovingPiece
 >
+
+type _UpdateCastling<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = {
+  K: _IsWhiteCastleShort<Game, Move> extends true ? false : Game['castling']['K'],
+  Q: _IsWhiteCastleLong<Game, Move> extends true ? false : Game['castling']['Q'],
+  k: _IsBlackCastleShort<Game, Move> extends true ? false : Game['castling']['k'],
+  q: _IsBlackCastleLong<Game, Move> extends true ? false : Game['castling']['q'],
+}
 
 export type _ReplaceAt<
   T extends MaybePiece[],
@@ -211,34 +221,34 @@ type _IsLegal<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['board'][Move['from']] extends MaybePiece ? false
-  : _IsBlackShortCastle<Game, Move> extends true ? 1
-  : _IsBlackLongCastle<Game, Move> extends true ? 2
-  : _IsWhiteShortCastle<Game, Move> extends true ? 3
-  : _IsWhiteLongCastle<Game, Move> extends true ? 4
+  : _IsBlackCastleShort<Game, Move> extends true ? 1
+  : _IsBlackCastleLong<Game, Move> extends true ? 2
+  : _IsWhiteCastleShort<Game, Move> extends true ? 3
+  : _IsWhiteCastleLong<Game, Move> extends true ? 4
   : 5
 
-type _IsBlackShortCastle<
+type _IsBlackCastleShort<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['castling']['k'] extends true
   ? [Move['from'], Move['to']] extends [4, 6] ? true : false
   : false
 
-type _IsBlackLongCastle<
+type _IsBlackCastleLong<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['castling']['q'] extends true
   ? [Move['from'], Move['to']] extends [4, 2] ? true : false
   : false
 
-type _IsWhiteShortCastle<
+type _IsWhiteCastleShort<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['castling']['K'] extends true
   ? [Move['from'], Move['to']] extends [60, 62] ? true : false
   : false
 
-type _IsWhiteLongCastle<
+type _IsWhiteCastleLong<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['castling']['Q'] extends true
