@@ -7,6 +7,8 @@ import type {
   Indices,
   Move,
   ParsedGame,
+  ParsedMove,
+  Unoccupied,
   Piece,
   PieceColor,
   Position,
@@ -14,13 +16,18 @@ import type {
   Positions,
 } from './base'
 
+import type {
+  ParseSan,
+  ToPositions,
+  ToSans,
+} from './notation'
+
 import type { BishopMoves } from './pieces/bishop'
 import type { KingMoves } from './pieces/king'
 import type { KnightMoves } from './pieces/knight'
 import type { PawnMoves } from './pieces/pawn'
 import type { QueenMoves } from './pieces/queen'
 import type { RookMoves } from './pieces/rook'
-import type { ToPositions, ToSans } from './notation'
 
 /**
  * Get all possible moves, even ones that result in self-check
@@ -121,6 +128,52 @@ export type IsCheck<
   KingColor extends Color = Game['turn'],
 > = _FindKing<Game, KingColor> extends infer KingIndex extends Index
   ? _IsThreatened<Game, KingIndex, EnemyColor<KingColor>>
+  : false
+
+/**
+ * Test if a move is legal
+ */
+export type IsLegal<
+  Game extends ParsedGame,
+  San extends string,
+> = _IsLegal<Game, ParseSan<San>>
+
+type _IsLegal<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['board'][Move['from']] extends Unoccupied ? false
+  : _IsBlackShortCastle<Game, Move> extends true ? 1
+  : _IsBlackLongCastle<Game, Move> extends true ? 2
+  : _IsWhiteShortCastle<Game, Move> extends true ? 3
+  : _IsWhiteLongCastle<Game, Move> extends true ? 4
+  : 5
+
+type _IsBlackShortCastle<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['castling']['k'] extends true
+  ? [Move['from'], Move['to']] extends [4, 6] ? true : false
+  : false
+
+type _IsBlackLongCastle<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['castling']['q'] extends true
+  ? [Move['from'], Move['to']] extends [4, 2] ? true : false
+  : false
+
+type _IsWhiteShortCastle<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['castling']['K'] extends true
+  ? [Move['from'], Move['to']] extends [60, 62] ? true : false
+  : false
+
+type _IsWhiteLongCastle<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['castling']['Q'] extends true
+  ? [Move['from'], Move['to']] extends [60, 58] ? true : false
   : false
 
 /**
