@@ -7,6 +7,7 @@
     "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "node",
+    "noErrorTruncation": true,
     "noImplicitAny": true,
     "outDir": "dist",
     "paths": {
