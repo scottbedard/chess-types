@@ -1,5 +1,5 @@
 import { assertType, describe, test } from 'vitest'
-import type { FormatCastling, ParseFen } from '@/notation'
+import type { FormatGame, ParseFen } from '@/notation'
 
 import type {
   ApplyMoveUnsafe,
@@ -65,17 +65,35 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   })
 
   test('castle white short', () => {
-    type Game = ParseFen<'r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1'>
+    type Game = ParseFen<'8/8/8/8/8/8/8/4K2R w K - 0 1'>
 
-    type WhiteShort = FormatCastling<ApplyMoveUnsafe<Game, 'e1g1'>['castling']>
-    type WhiteLong = FormatCastling<ApplyMoveUnsafe<Game, 'e1c1'>['castling']>
-    type BlackShort = FormatCastling<ApplyMoveUnsafe<Game, 'e8g8'>['castling']>
-    type BlackLong = FormatCastling<ApplyMoveUnsafe<Game, 'e8c8'>['castling']>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e1g1'>>
 
-    assertType<WhiteShort>('Qkq')
-    assertType<WhiteLong>('Kkq')
-    assertType<BlackShort>('KQq')
-    assertType<BlackLong>('KQk')
+    assertType<Result>('8/8/8/8/8/8/8/5RK1 b - - 1 1')
+  })
+
+  test('white castle long', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/R3K3 w Q - 0 1'>
+
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e1c1'>>
+
+    assertType<Result>('8/8/8/8/8/8/8/2KR4 b - - 1 1')
+  })
+
+  test('black castle short', () => {
+    type Game = ParseFen<'4k2r/8/8/8/8/8/8/8 b k - 0 1'>
+
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e8g8'>>
+
+    assertType<Result>('5rk1/8/8/8/8/8/8/8 w - - 1 2')
+  })
+
+  test('black castle long', () => {
+    type Game = ParseFen<'r3k3/8/8/8/8/8/8/8 b q - 0 1'>
+
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e8c8'>>
+
+    assertType<Result>('2kr4/8/8/8/8/8/8/8 w - - 1 2')
   })
 })
 

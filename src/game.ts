@@ -77,11 +77,34 @@ type _UpdateBoard<
   Game extends ParsedGame,
   MovingPiece extends Piece,
   Move extends ParsedMove,
-> = _ReplaceAt<
-  _ReplaceAt<Game['board'], Move['from'], Unoccupied>,
-  Move['to'],
-  MovingPiece
->
+> = _IsWhiteCastleShort<Game, Move> extends true  ? _ReplaceValues<Game['board'], [
+      [60, Unoccupied],
+      [61, 'R'],
+      [62, 'K'],
+      [63, Unoccupied],
+    ]>
+  : _IsWhiteCastleLong<Game, Move> extends true ? _ReplaceValues<Game['board'], [
+    [56, Unoccupied],
+    [58, 'K'],
+    [59, 'R'],
+    [60, Unoccupied],
+  ]>
+  : _IsBlackCastleShort<Game, Move> extends true ? _ReplaceValues<Game['board'], [
+    [4, Unoccupied],
+    [5, 'r'],
+    [6, 'k'],
+    [7, Unoccupied],
+  ]>
+  : _IsBlackCastleLong<Game, Move> extends true ? _ReplaceValues<Game['board'], [
+    [0, Unoccupied],
+    [2, 'k'],
+    [3, 'r'],
+    [4, Unoccupied],
+  ]>
+  : _ReplaceValues<Game['board'], [
+    [Move['from'], Unoccupied],
+    [Move['to'], MovingPiece],
+  ]>
 
 type _UpdateCastling<
   Game extends ParsedGame,
@@ -92,6 +115,13 @@ type _UpdateCastling<
   k: _IsBlackCastleShort<Game, Move> extends true ? false : Game['castling']['k'],
   q: _IsBlackCastleLong<Game, Move> extends true ? false : Game['castling']['q'],
 }
+
+export type _ReplaceValues<
+  T extends MaybePiece[],
+  U extends [Index, MaybePiece][] = []
+> = U extends [infer Head extends [Index, MaybePiece], ...infer Tail extends [Index, MaybePiece][]]
+  ? _ReplaceValues<_ReplaceAt<T, Head[0], Head[1]>, Tail>
+  : T
 
 export type _ReplaceAt<
   T extends MaybePiece[],
