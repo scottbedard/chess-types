@@ -12,7 +12,9 @@ import type {
 
 import type { ToPositions } from '@/notation'
 
-/** Walk along the board, stopping short of friendly pieces */
+/**
+ * Walk along the board, stopping short of friendly pieces
+ **/
 export type Walk<
   Game extends ParsedGame,
   Friendly extends Color,
@@ -28,6 +30,9 @@ export type Walk<
       : [...Acc, To]
   : Acc
 
+/**
+ * Walk and cast results to positions
+ */
 export type WalkPositions<
   Game extends ParsedGame,
   Friendly extends Color,

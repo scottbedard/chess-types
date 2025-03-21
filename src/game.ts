@@ -5,6 +5,7 @@ import type {
   FriendlyPiece,
   Index,
   Indices,
+  MaybePiece,
   Move,
   ParsedGame,
   ParsedMove,
@@ -42,22 +43,60 @@ export type ApplyMoveUnsafe<
 type _ApplyMoveUnsafe<
   Game extends ParsedGame,
   Move extends ParsedMove,
-> = Game['board'][Move['from']] extends infer MovingPiece extends Piece
+> = Game['board'][Move['from']] extends infer P extends Piece
   ? {
-    board: Game['board'],
-    turn: EnemyColor<PieceColor<MovingPiece>>
-    halfmove: MovingPiece extends 'p' | 'P'
-      ? 0
-      : Game['board'][Move['to']] extends Piece
-          ? 0
-          : Increment<Game['halfmove']>
-    fullmove: PieceColor<MovingPiece> extends 'b'
-      ? Increment<Game['fullmove']>
-      : Game['fullmove']
+    board: _UpdateBoard<Game, P, Move>
+    turn: EnemyColor<PieceColor<P>>
+    halfmove: _CountHalfmove<Game, P, Move>
+    fullmove: _CountFullmove<Game, P>
     castling: Game['castling']
     ep: Game['ep']
   }
   : never
+
+type _CountHalfmove<
+  Game extends ParsedGame,
+  P extends Piece,
+  Move extends ParsedMove,
+> = P extends 'p' | 'P'
+  ? 0
+  : Game['board'][Move['to']] extends Piece
+      ? 0
+      : Increment<Game['halfmove']>
+
+type _CountFullmove<
+  Game extends ParsedGame,
+  P extends MaybePiece,
+> = P extends Piece
+  ? PieceColor<P> extends 'b'
+    ? Increment<Game['fullmove']>
+    : Game['fullmove']
+  : Game['fullmove']
+
+type _UpdateBoard<
+  Game extends ParsedGame,
+  MovingPiece extends Piece,
+  Move extends ParsedMove,
+> = _ReplaceAt<
+  _ReplaceAt<Game['board'], Move['from'], Unoccupied>,
+  Move['to'],
+  MovingPiece
+>
+
+export type _ReplaceAt<
+  T extends MaybePiece[],
+  U extends Index,
+  V extends MaybePiece
+> = [
+  U extends 0 ? V : T[0], U extends 1 ? V : T[1], U extends 2 ? V : T[2], U extends 3 ? V : T[3], U extends 4 ? V : T[4], U extends 5 ? V : T[5], U extends 6 ? V : T[6], U extends 7 ? V : T[7],
+  U extends 8 ? V : T[8], U extends 9 ? V : T[9], U extends 10 ? V : T[10], U extends 11 ? V : T[11], U extends 12 ? V : T[12], U extends 13 ? V : T[13], U extends 14 ? V : T[14], U extends 15 ? V : T[15],
+  U extends 16 ? V : T[16], U extends 17 ? V : T[17], U extends 18 ? V : T[18], U extends 19 ? V : T[19], U extends 20 ? V : T[20], U extends 21 ? V : T[21], U extends 22 ? V : T[22], U extends 23 ? V : T[23],
+  U extends 24 ? V : T[24], U extends 25 ? V : T[25], U extends 26 ? V : T[26], U extends 27 ? V : T[27], U extends 28 ? V : T[28], U extends 29 ? V : T[29], U extends 30 ? V : T[30], U extends 31 ? V : T[31],
+  U extends 32 ? V : T[32], U extends 33 ? V : T[33], U extends 34 ? V : T[34], U extends 35 ? V : T[35], U extends 36 ? V : T[36], U extends 37 ? V : T[37], U extends 38 ? V : T[38], U extends 39 ? V : T[39],
+  U extends 40 ? V : T[40], U extends 41 ? V : T[41], U extends 42 ? V : T[42], U extends 43 ? V : T[43], U extends 44 ? V : T[44], U extends 45 ? V : T[45], U extends 46 ? V : T[46], U extends 47 ? V : T[47],
+  U extends 48 ? V : T[48], U extends 49 ? V : T[49], U extends 50 ? V : T[50], U extends 51 ? V : T[51], U extends 52 ? V : T[52], U extends 53 ? V : T[53], U extends 54 ? V : T[54], U extends 55 ? V : T[55],
+  U extends 56 ? V : T[56], U extends 57 ? V : T[57], U extends 58 ? V : T[58], U extends 59 ? V : T[59], U extends 60 ? V : T[60], U extends 61 ? V : T[61], U extends 62 ? V : T[62], U extends 63 ? V : T[63],
+]
 
 /**
  * Get all possible moves, even ones that result in self-check
@@ -171,7 +210,7 @@ export type IsLegal<
 type _IsLegal<
   Game extends ParsedGame,
   Move extends ParsedMove,
-> = Game['board'][Move['from']] extends Unoccupied ? false
+> = Game['board'][Move['from']] extends MaybePiece ? false
   : _IsBlackShortCastle<Game, Move> extends true ? 1
   : _IsBlackLongCastle<Game, Move> extends true ? 2
   : _IsWhiteShortCastle<Game, Move> extends true ? 3

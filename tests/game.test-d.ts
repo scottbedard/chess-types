@@ -53,6 +53,16 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
 
     assertType<Move4['halfmove']>(1)
   })
+
+  test('moves piece and unoccupies from index', () => {
+    type Game = ParseFen<'R7/8/8/8/8/8/8/8 w - - 0 1'>
+
+    type Result = ApplyMoveUnsafe<Game, 'a8b8'>
+
+    assertType<Result['board'][0]>(' ')
+
+    assertType<Result['board'][1]>('R')
+  })
 })
 
 describe('Chessboard', () => {
