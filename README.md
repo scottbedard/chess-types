@@ -10,40 +10,34 @@ Welcome to a strange TypeScript experiment, my goal is to play chess inside the 
 
 ## Basic usage
 
-Games can be parsed and stringified using Forsyth–Edwards Notation notation.
+To get started, create a game and apply moves to it using a list of `{from}{to}` strings.
 
 ```ts
-type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+type Game = NewGame[
+  'e2e4', 'e7e5',
+  'g1f3', 'b8c6',
+  'f1c4', 'f8c5',
+]>
 
-/*
-{
-  board: [
-    'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r',
-    'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
-    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
-    'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
-  ],
-  turn: 'w',
-  castling: {
-    K: true,
-    Q: true,
-    k: true,
-    q: true,
-  },
-  ep: null,
-  halfmove: 0,
-  fullmove: 1,
-}
-*/
+type Board = Chessboard<Game>
 
-type Fen = FormatGame<Game> // 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+// {
+//     8: " r * b q k * n r ";
+//     7: " p p p p * p p p ";
+//     6: " - * n * - * - * ";
+//     5: " * - b - p - * - ";
+//     4: " - * B * P * - * ";
+//     3: " * - * - * N * - ";
+//     2: " P P P P - P P P ";
+//     1: " R N B Q K - * R ";
+// }
+
+type Fen = FormatGame<Game>
+
+// 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4'
 ```
 
-More info to come, check back later.
+There are many of other types available under the hood, more docs to come.
 
 ## License
 
