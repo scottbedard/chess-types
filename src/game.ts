@@ -33,6 +33,7 @@ import type { KnightMoves } from './pieces/knight'
 import type { PawnMoves } from './pieces/pawn'
 import type { QueenMoves } from './pieces/queen'
 import type { RookMoves } from './pieces/rook'
+import { _ } from 'vitest/dist/chunks/reporters.d.CqBhtcTq'
 
 /**
  * Apply moves to a game, regardless of turn or legality
@@ -352,21 +353,75 @@ export type IsLegal<
 type _IsLegal<
   Game extends ParsedGame,
   Move extends ParsedMove,
-> = Game['board'][Move['from']] extends infer P extends Piece
-  ? Move['castle'] extends 'K' ? 1
-  : Move['castle'] extends 'Q' ? 2
-  : Move['castle'] extends 'k' ? 3
-  : Move['castle'] extends 'q' ? 4
-  : PieceColor<P> extends infer C extends Color
-    ? _CurrentMovesUnsafe<Game, C, [Move['from']]> extends infer UnsafeMoves extends ParsedMove[]
-      ? _ContainsMove<Move, UnsafeMoves> extends true
-        ? _ExposesKing<Game, Move> extends false
-          ? true // move is legal
-          : false // prohibit self-check
-        : false // move is not among the unsafe moves
-      : never // we're checking one position
-    : never // pieces must have a color
-  : false // no piece at from position
+> = Move['castle'] extends 'K' ? _HasBoardValues<Game, [
+    [60, 'K'],
+    [61, Unoccupied],
+    [62, Unoccupied],
+    [63, 'R'],
+  ]> extends true
+    ? Game['castling']['K'] extends true
+      ? _CurrentMovesUnsafe<Game, 'b'> extends infer UnsafeMoves extends ParsedMove[]
+        ? _ContainsReachable<Game, UnsafeMoves, [60, 61, 62]> extends false
+          ? true
+          : false // a castling square is threatened
+        : never
+      : false // no castling rights
+    : false // invalid setup for castling
+  : Move['castle'] extends 'Q' ? _HasBoardValues<Game, [
+    [60, 'K'],
+    [59, Unoccupied],
+    [58, Unoccupied],
+    [57, Unoccupied],
+    [56, 'R'],
+  ]> extends true
+    ? Game['castling']['Q'] extends true
+      ? _CurrentMovesUnsafe<Game, 'b'> extends infer UnsafeMoves extends ParsedMove[]
+        ? _ContainsReachable<Game, UnsafeMoves, [60, 59, 58, 57]> extends false
+          ? true
+          : false // a castling square is threatened
+        : never
+      : false // no castling rights
+    : false // invalid setup for castling
+  : Move['castle'] extends 'k' ? _HasBoardValues<Game, [
+    [4, 'k'],
+    [5, Unoccupied],
+    [6, Unoccupied],
+    [7, 'r'],
+  ]> extends true
+    ? Game['castling']['k'] extends true
+      ? _CurrentMovesUnsafe<Game, 'w'> extends infer UnsafeMoves extends ParsedMove[]
+        ? _ContainsReachable<Game, UnsafeMoves, [4, 5, 6]> extends false
+          ? true
+          : false // a castling square is threatened
+        : never
+      : false // no castling rights
+    : false // invalid setup for castling
+  : Move['castle'] extends 'q' ? _HasBoardValues<Game, [
+    [4, 'k'],
+    [3, Unoccupied],
+    [2, Unoccupied],
+    [1, Unoccupied],
+    [0, 'r'],
+  ]> extends true
+    ? Game['castling']['q'] extends true
+      ? _CurrentMovesUnsafe<Game, 'w'> extends infer UnsafeMoves extends ParsedMove[]
+        ? _ContainsReachable<Game, UnsafeMoves, [4, 3, 2, 1]> extends false
+          ? true
+          : false // a castling square is threatened
+        : never
+      : false // no castling rights
+    : false // invalid setup for castling
+  : Game['board'][Move['from']] extends infer P extends Piece
+    ? PieceColor<P> extends infer C extends Color
+      ? _CurrentMovesUnsafe<Game, C, [Move['from']]> extends infer UnsafeMoves extends ParsedMove[]
+        ? _ContainsMove<Move, UnsafeMoves> extends true
+          ? _ExposesKing<Game, Move> extends false
+            ? true // move is legal
+            : false // prohibit self-check
+          : false // move is not among the unsafe moves
+        : never // we're checking one position
+      : never // pieces must have a color
+    : false // no piece at from position
 
 type _ContainsMove<
   T extends ParsedMove,
@@ -377,39 +432,30 @@ type _ContainsMove<
       : _ContainsMove<T, Tail>
     : false
 
+type _ContainsReachable<
+  Game extends ParsedGame,
+  Moves extends ParsedMove[],
+  T extends Index[]
+> = T extends [infer Head extends Index, ...infer Tail extends Index[]]
+  ? _IsReachable<Head, Moves> extends true
+    ? true
+    : _ContainsReachable<Game, Moves, Tail>
+  : false
+
+type _HasBoardValues<
+  Game extends ParsedGame,
+  T extends [Index, MaybePiece][] = []
+> = T extends [infer Head extends [Index, MaybePiece], ...infer Tail extends [Index, MaybePiece][]]
+  ? Game['board'][Head[0]] extends Head[1]
+    ? _HasBoardValues<Game, Tail>
+    : false
+  : true
+
 type _ExposesKing<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['board'][Move['from']] extends infer P extends Piece
   ? IsCheck<_ApplyMoveUnsafe<Game, Move>, PieceColor<P>>
-  : false
-
-type _IsBlackCastleShort<
-  Game extends ParsedGame,
-  Move extends ParsedMove,
-> = Game['castling']['k'] extends true
-  ? [Move['from'], Move['to']] extends [4, 6] ? true : false
-  : false
-
-type _IsBlackCastleLong<
-  Game extends ParsedGame,
-  Move extends ParsedMove,
-> = Game['castling']['q'] extends true
-  ? [Move['from'], Move['to']] extends [4, 2] ? true : false
-  : false
-
-type _IsWhiteCastleShort<
-  Game extends ParsedGame,
-  Move extends ParsedMove,
-> = Game['castling']['K'] extends true
-  ? [Move['from'], Move['to']] extends [60, 62] ? true : false
-  : false
-
-type _IsWhiteCastleLong<
-  Game extends ParsedGame,
-  Move extends ParsedMove,
-> = Game['castling']['Q'] extends true
-  ? [Move['from'], Move['to']] extends [60, 58] ? true : false
   : false
 
 /**
