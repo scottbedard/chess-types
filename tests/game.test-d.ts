@@ -72,7 +72,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('castle white short', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/4K2R w K - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e1g1'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'O-O'>>
 
     assertType<Result>('8/8/8/8/8/8/8/5RK1 b - - 1 1')
   })
@@ -80,7 +80,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('white castle long', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/R3K3 w Q - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e1c1'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'O-O-O'>>
 
     assertType<Result>('8/8/8/8/8/8/8/2KR4 b - - 1 1')
   })
@@ -88,7 +88,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('black castle short', () => {
     type Game = ParseFen<'4k2r/8/8/8/8/8/8/8 b k - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e8g8'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'o-o'>>
 
     assertType<Result>('5rk1/8/8/8/8/8/8/8 w - - 1 2')
   })
@@ -96,7 +96,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('black castle long', () => {
     type Game = ParseFen<'r3k3/8/8/8/8/8/8/8 b q - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e8c8'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'o-o-o'>>
 
     assertType<Result>('2kr4/8/8/8/8/8/8/8 w - - 1 2')
   })

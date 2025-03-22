@@ -45,7 +45,7 @@ export type ApplyMoveUnsafe<
 type _ApplyMoveUnsafe<
   Game extends ParsedGame,
   Move extends ParsedMove,
-> = Game['board'][Move['from']] extends infer P extends Piece
+> = _ApplyMovePiece<Game, Move> extends infer P extends Piece
   ? {
     board: _UpdateBoard<Game, P, Move>
     turn: EnemyColor<PieceColor<P>>
@@ -56,14 +56,31 @@ type _ApplyMoveUnsafe<
   }
   : never
 
+type _ApplyMovePiece<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Move['castle'] extends 'K'
+    ? 'K'
+    : Move['castle'] extends 'k'
+      ? 'k'
+      : Move['castle'] extends 'Q'
+        ? 'Q'
+        : Move['castle'] extends 'q'
+          ? 'q'
+          : Game['board'][Move['from']] extends infer P extends Piece
+            ? P
+            : false
+
 type _CountHalfmove<
   Game extends ParsedGame,
   P extends Piece,
   Move extends ParsedMove,
 > = P extends 'p' | 'P'
   ? 0
-  : Game['board'][Move['to']] extends Piece
-    ? 0
+  : Move['castle'] extends false
+    ? Game['board'][Move['to']] extends Piece
+      ? 0
+      : Increment<Game['halfmove']>
     : Increment<Game['halfmove']>
 
 type _CountFullmove<
@@ -79,25 +96,25 @@ type _UpdateBoard<
   Game extends ParsedGame,
   P extends Piece,
   Move extends ParsedMove,
-> = _IsWhiteCastleShort<Game, Move> extends true  ? _ReplaceValues<Game['board'], [
+> = Move['castle'] extends 'K' ? _ReplaceValues<Game['board'], [
     [60, Unoccupied],
     [61, 'R'],
     [62, 'K'],
     [63, Unoccupied],
   ]>
-  : _IsWhiteCastleLong<Game, Move> extends true ? _ReplaceValues<Game['board'], [
+  : Move['castle'] extends 'Q' ? _ReplaceValues<Game['board'], [
     [56, Unoccupied],
     [58, 'K'],
     [59, 'R'],
     [60, Unoccupied],
   ]>
-  : _IsBlackCastleShort<Game, Move> extends true ? _ReplaceValues<Game['board'], [
+  : Move['castle'] extends 'k' ? _ReplaceValues<Game['board'], [
     [4, Unoccupied],
     [5, 'r'],
     [6, 'k'],
     [7, Unoccupied],
   ]>
-  : _IsBlackCastleLong<Game, Move> extends true ? _ReplaceValues<Game['board'], [
+  : Move['castle'] extends 'q' ? _ReplaceValues<Game['board'], [
     [0, Unoccupied],
     [2, 'k'],
     [3, 'r'],
@@ -133,10 +150,10 @@ type _UpdateCastling<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = {
-  K: _IsWhiteCastleShort<Game, Move> extends true ? false : Game['castling']['K'],
-  Q: _IsWhiteCastleLong<Game, Move> extends true ? false : Game['castling']['Q'],
-  k: _IsBlackCastleShort<Game, Move> extends true ? false : Game['castling']['k'],
-  q: _IsBlackCastleLong<Game, Move> extends true ? false : Game['castling']['q'],
+  K: Move['castle'] extends 'K' ? false : Game['castling']['K'],
+  Q: Move['castle'] extends 'Q' ? false : Game['castling']['Q'],
+  k: Move['castle'] extends 'k' ? false : Game['castling']['k'],
+  q: Move['castle'] extends 'q' ? false : Game['castling']['q'],
 }
 
 type _UpdateEnPassant<
@@ -336,10 +353,10 @@ type _IsLegal<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = Game['board'][Move['from']] extends infer P extends Piece
-  ? _IsBlackCastleShort<Game, Move> extends true ? 1
-  : _IsBlackCastleLong<Game, Move> extends true ? 2
-  : _IsWhiteCastleShort<Game, Move> extends true ? 3
-  : _IsWhiteCastleLong<Game, Move> extends true ? 4
+  ? Move['castle'] extends 'K' ? 1
+  : Move['castle'] extends 'Q' ? 2
+  : Move['castle'] extends 'k' ? 3
+  : Move['castle'] extends 'q' ? 4
   : PieceColor<P> extends infer C extends Color
     ? _CurrentMovesUnsafe<Game, C, [Move['from']]> extends infer UnsafeMoves extends ParsedMove[]
       ? _ContainsMove<Move, UnsafeMoves> extends true
