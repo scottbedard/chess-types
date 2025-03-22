@@ -309,6 +309,50 @@ describe('ParseSan<T>', () => {
     })
   })
 
+  test('O-O', () => {
+    type Result = ParseSan<'O-O'>
+
+    assertType<Result>({
+      castle: 'K',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
+  test('O-O-O', () => {
+    type Result = ParseSan<'O-O-O'>
+
+    assertType<Result>({
+      castle: 'Q',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
+  test('o-o', () => {
+    type Result = ParseSan<'o-o'>
+
+    assertType<Result>({
+      castle: 'k',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
+  test('o-o-o', () => {
+    type Result = ParseSan<'o-o-o'>
+
+    assertType<Result>({
+      castle: 'q',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
   test('whoops', () => {
     type Result = ParseSan<'whoops'> extends never ? true : false
 

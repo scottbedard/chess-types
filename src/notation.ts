@@ -138,14 +138,22 @@ export type _ParseFen<T extends string> =
 
 /** Parse move notation */
 export type ParseSan<T extends string> =
-  T extends `${infer FromFile extends File}${infer FromRank extends Rank}${infer ToFile extends File}${infer ToRank extends Rank}${infer Promotion extends PromotionPiece | ''}`
-    ? {
-      castle: false,
-      from: PositionIndex[`${FromFile}${FromRank}`],
-      to: PositionIndex[`${ToFile}${ToRank}`],
-      promotion: Promotion extends PromotionPiece ? Promotion : ''
-    }
-    : never
+  T extends 'O-O'
+    ? { castle: 'K', from: 0, to: 0, promotion: '' }
+    : T extends 'O-O-O'
+      ? { castle: 'Q', from: 0, to: 0, promotion: '' }
+      : T extends 'o-o'
+        ? { castle: 'k', from: 0, to: 0, promotion: '' }
+        : T extends 'o-o-o'
+          ? { castle: 'q', from: 0, to: 0, promotion: '' }
+          : T extends `${infer FromFile extends File}${infer FromRank extends Rank}${infer ToFile extends File}${infer ToRank extends Rank}${infer Promotion extends PromotionPiece | ''}`
+            ? {
+              castle: false,
+              from: PositionIndex[`${FromFile}${FromRank}`],
+              to: PositionIndex[`${ToFile}${ToRank}`],
+              promotion: Promotion extends PromotionPiece ? Promotion : ''
+            }
+            : never
 
 /**
  * Parse a list of moves
