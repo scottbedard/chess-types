@@ -72,7 +72,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('castle white short', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/4K2R w K - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e1g1'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'O-O'>>
 
     assertType<Result>('8/8/8/8/8/8/8/5RK1 b - - 1 1')
   })
@@ -80,7 +80,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('white castle long', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/R3K3 w Q - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e1c1'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'O-O-O'>>
 
     assertType<Result>('8/8/8/8/8/8/8/2KR4 b - - 1 1')
   })
@@ -88,7 +88,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('black castle short', () => {
     type Game = ParseFen<'4k2r/8/8/8/8/8/8/8 b k - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e8g8'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'o-o'>>
 
     assertType<Result>('5rk1/8/8/8/8/8/8/8 w - - 1 2')
   })
@@ -96,7 +96,7 @@ describe('ApplyMoveUnsafe<Game, San>', () => {
   test('black castle long', () => {
     type Game = ParseFen<'r3k3/8/8/8/8/8/8/8 b q - 0 1'>
 
-    type Result = FormatGame<ApplyMoveUnsafe<Game, 'e8c8'>>
+    type Result = FormatGame<ApplyMoveUnsafe<Game, 'o-o-o'>>
 
     assertType<Result>('2kr4/8/8/8/8/8/8/8 w - - 1 2')
   })
@@ -389,6 +389,58 @@ describe('IsLegal<Game, San>', () => {
     type Result = IsLegal<Game, 'd6d5'>
 
     assertType<Result>(false)
+  })
+
+  test('cannot castle through check (O-O)', () => {
+    type Result1 = IsLegal<ParseFen<'4r3/8/8/8/8/8/8/4K2R w K - 0 1'>, 'O-O'>
+    type Result2 = IsLegal<ParseFen<'5r2/8/8/8/8/8/8/4K2R w K - 0 1'>, 'O-O'>
+    type Result3 = IsLegal<ParseFen<'6r1/8/8/8/8/8/8/4K2R w K - 0 1'>, 'O-O'>
+    type Result4 = IsLegal<ParseFen<'7r/8/8/8/8/8/8/4K2R w K - 0 1'>, 'O-O'>
+
+    assertType<Result1>(false)
+    assertType<Result2>(false)
+    assertType<Result3>(false)
+    assertType<Result4>(true)
+  })
+
+  test('cannot castle through check (O-O-O)', () => {
+    type Result1 = IsLegal<ParseFen<'4r3/8/8/8/8/8/8/R3K3 w Q - 0 1'>, 'O-O-O'>
+    type Result2 = IsLegal<ParseFen<'3r4/8/8/8/8/8/8/R3K3 w Q - 0 1'>, 'O-O-O'>
+    type Result3 = IsLegal<ParseFen<'2r5/8/8/8/8/8/8/R3K3 w Q - 0 1'>, 'O-O-O'>
+    type Result4 = IsLegal<ParseFen<'1r6/8/8/8/8/8/8/R3K3 w Q - 0 1'>, 'O-O-O'>
+    type Result5 = IsLegal<ParseFen<'r7/8/8/8/8/8/8/R3K3 w Q - 0 1'>, 'O-O-O'>
+
+    assertType<Result1>(false)
+    assertType<Result2>(false)
+    assertType<Result3>(false)
+    assertType<Result4>(false)
+    assertType<Result5>(true)
+  })
+
+  test('cannot castle through check (o-o)', () => {
+    type Result1 = IsLegal<ParseFen<'4k2r/8/8/8/8/8/8/4R3 b k - 0 1'>, 'o-o'>
+    type Result2 = IsLegal<ParseFen<'4k2r/8/8/8/8/8/8/5R2 b k - 0 1'>, 'o-o'>
+    type Result3 = IsLegal<ParseFen<'4k2r/8/8/8/8/8/8/6R1 b k - 0 1'>, 'o-o'>
+    type Result4 = IsLegal<ParseFen<'4k2r/8/8/8/8/8/8/7R b k - 0 1'>, 'o-o'>
+
+    assertType<Result1>(false)
+    assertType<Result2>(false)
+    assertType<Result3>(false)
+    assertType<Result4>(true)
+  })
+
+  test('cannot castle through check (o-o-o)', () => {
+    type Result1 = IsLegal<ParseFen<'r3k3/8/8/8/8/8/8/4R3 b q - 0 1'>, 'o-o-o'>
+    type Result2 = IsLegal<ParseFen<'r3k3/8/8/8/8/8/8/3R4 b q - 0 1'>, 'o-o-o'>
+    type Result3 = IsLegal<ParseFen<'r3k3/8/8/8/8/8/8/2R5 b q - 0 1'>, 'o-o-o'>
+    type Result4 = IsLegal<ParseFen<'r3k3/8/8/8/8/8/8/1R6 b q - 0 1'>, 'o-o-o'>
+    type Result5 = IsLegal<ParseFen<'r3k3/8/8/8/8/8/8/R7 b q - 0 1'>, 'o-o-o'>
+
+    assertType<Result1>(false)
+    assertType<Result2>(false)
+    assertType<Result3>(false)
+    assertType<Result4>(false)
+    assertType<Result5>(true)
   })
 })
 
