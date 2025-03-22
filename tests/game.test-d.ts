@@ -484,9 +484,7 @@ describe('OccupiedBy<Color, Game>', () => {
 
 describe('Play<Game, Moves>', () => {
   test('Italian game', () => {
-    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
-
-    type Result = Play<Game, [
+    type Result = Play<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [
       'e2e4', 'e7e5',
       'g1f3', 'b8c6',
       'f1c4', 'f8c5',

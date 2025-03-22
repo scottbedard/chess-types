@@ -19,7 +19,9 @@ import type {
 } from './base'
 
 import type {
+  ParseFen,
   ParseSan,
+  ParseSans,
   ToPositions,
   ToSans,
 } from './notation'
@@ -34,7 +36,7 @@ import type { QueenMoves } from './pieces/queen'
 import type { RookMoves } from './pieces/rook'
 
 /**
- * Apply move to a game, regardless of turn or legality
+ * Apply moves to a game, regardless of turn or legality
  */
 export type ApplyMoveUnsafe<
   Game extends ParsedGame,
@@ -185,6 +187,16 @@ export type _ReplaceAt<
   U extends 48 ? V : T[48], U extends 49 ? V : T[49], U extends 50 ? V : T[50], U extends 51 ? V : T[51], U extends 52 ? V : T[52], U extends 53 ? V : T[53], U extends 54 ? V : T[54], U extends 55 ? V : T[55],
   U extends 56 ? V : T[56], U extends 57 ? V : T[57], U extends 58 ? V : T[58], U extends 59 ? V : T[59], U extends 60 ? V : T[60], U extends 61 ? V : T[61], U extends 62 ? V : T[62], U extends 63 ? V : T[63],
 ]
+
+/**
+ * Apply multiple moves, regardless of turn or legality
+ */
+type _ApplyMovesUnsafe<
+  Game extends ParsedGame,
+  Moves extends ParsedMove[] = [],
+> = Moves extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
+  ? _ApplyMovesUnsafe<_ApplyMoveUnsafe<Game, Head>, Tail>
+  : Game
 
 /**
  * Get current legal moves
@@ -443,11 +455,13 @@ export type _OccupiedBy<
  * Play a game
  */
 export type Play<
-Game extends ParsedGame,
-Moves extends string[],
-> = Moves extends [infer Head extends string, ...infer Tail extends string[]]
-? Play<ApplyMoveUnsafe<Game, Head>, Tail>
-: Game
+  Game extends ParsedGame | string,
+  Moves extends string[],
+> = Game extends infer G extends ParsedGame
+  ? _Play<G, ParseSans<Moves>>
+  : Game extends string
+    ? Play<ParseFen<Game>, Moves>
+    : never
 
 type _Play<
   Game extends ParsedGame,

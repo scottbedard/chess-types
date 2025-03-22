@@ -138,6 +138,16 @@ export type ParseSan<T extends string> =
     }
     : never
 
+/**
+ * Parse a list of moves
+ */
+export type ParseSans<
+  Moves extends string[],
+  Acc extends ParsedMove[] = []
+> = Moves extends [infer Head extends string, ...infer Tail extends string[]]
+  ? ParseSans<Tail, [...Acc, ParseSan<Head>]>
+  : Acc
+
 /** format tuple of sans */
 export type ToSans<
   T extends ParsedMove[],
