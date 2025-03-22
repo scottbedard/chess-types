@@ -12,6 +12,7 @@ import type {
   IsLegal,
   IsThreatened,
   OccupiedBy,
+  Play,
 } from '@/game'
 
 describe('ApplyMoveUnsafe<Game, San>', () => {
@@ -478,5 +479,21 @@ describe('OccupiedBy<Color, Game>', () => {
     assertType<White>([
       'e3', 'a2', 'c2', 'g2', 'h2', 'h1'
     ])
+  })
+})
+
+describe('Play<Game, Moves>', () => {
+  test('Italian game', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Result = Play<Game, [
+      'e2e4', 'e7e5',
+      'g1f3', 'b8c6',
+      'f1c4', 'f8c5',
+    ]>
+
+    type Fen = FormatGame<Result>
+
+    assertType<Fen>('r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4')
   })
 })

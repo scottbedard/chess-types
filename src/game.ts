@@ -438,3 +438,20 @@ export type _OccupiedBy<
     ? _OccupiedBy<Game, C, Tail, [...Acc, Head]>
     : _OccupiedBy<Game, C, Tail, Acc>
   : Acc
+
+/**
+ * Play a game
+ */
+export type Play<
+Game extends ParsedGame,
+Moves extends string[],
+> = Moves extends [infer Head extends string, ...infer Tail extends string[]]
+? Play<ApplyMoveUnsafe<Game, Head>, Tail>
+: Game
+
+type _Play<
+  Game extends ParsedGame,
+  Moves extends ParsedMove[],
+> = Moves extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
+  ? _Play<_ApplyMoveUnsafe<Game, Head>, Tail>
+  : Game
