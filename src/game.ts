@@ -201,9 +201,9 @@ export type CurrentMovesUnsafe<
 export type _CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
-  Moves extends Index[] = _OccupiedBy<Game, Turn>,
+  From extends Index[] = _OccupiedBy<Game, Turn>,
   Acc extends Move[] = []
-> = Moves extends [infer Head extends Index, ...infer Tail extends Index[]]
+> = From extends [infer Head extends Index, ...infer Tail extends Index[]]
   ? Game['board'][Head] extends infer CurrentPiece extends Piece
     ? CurrentPiece extends 'p' | 'P' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...PawnMoves<Game, PieceColor<CurrentPiece>, Head>]>
       : CurrentPiece extends 'n' | 'N' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...KnightMoves<Game, PieceColor<CurrentPiece>, Head>]>
@@ -298,12 +298,37 @@ export type IsLegal<
 type _IsLegal<
   Game extends ParsedGame,
   Move extends ParsedMove,
-> = Game['board'][Move['from']] extends MaybePiece ? false
-  : _IsBlackCastleShort<Game, Move> extends true ? 1
+> = Game['board'][Move['from']] extends infer P extends Piece
+  ? _IsBlackCastleShort<Game, Move> extends true ? 1
   : _IsBlackCastleLong<Game, Move> extends true ? 2
   : _IsWhiteCastleShort<Game, Move> extends true ? 3
   : _IsWhiteCastleLong<Game, Move> extends true ? 4
-  : 5
+  : PieceColor<P> extends infer C extends Color
+    ? _CurrentMovesUnsafe<Game, C, [Move['from']]> extends infer UnsafeMoves extends ParsedMove[]
+      ? _ContainsMove<Move, UnsafeMoves> extends true
+        ? _ExposesKing<Game, Move> extends false
+          ? true // move is legal
+          : false // prohibit self-check
+        : false // move is not among the unsafe moves
+      : never // we're checking one position
+    : never // pieces must have a color
+  : false // no piece at from position
+
+type _ContainsMove<
+  T extends ParsedMove,
+  Acc extends ParsedMove[],
+> = Acc extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
+    ? Head extends T
+      ? true
+      : _ContainsMove<T, Tail>
+    : false
+
+type _ExposesKing<
+  Game extends ParsedGame,
+  Move extends ParsedMove,
+> = Game['board'][Move['from']] extends infer P extends Piece
+  ? IsCheck<_ApplyMoveUnsafe<Game, Move>, PieceColor<P>>
+  : false
 
 type _IsBlackCastleShort<
   Game extends ParsedGame,

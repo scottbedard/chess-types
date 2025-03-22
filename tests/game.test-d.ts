@@ -1,6 +1,6 @@
 import { assertType, describe, test } from 'vitest'
 import type { FormatGame, ParseFen } from '@/notation'
-import type { Positions } from '@/base'
+import type { Positions, PositionIndex } from '@/base'
 
 import type {
   ApplyMoveUnsafe,
@@ -8,6 +8,7 @@ import type {
   CurrentMovesUnsafe,
   FindKing,
   IsCheck,
+  IsLegal,
   IsThreatened,
   OccupiedBy,
 } from '@/game'
@@ -228,47 +229,6 @@ describe('Chessboard', () => {
   })
 })
 
-describe('OccupiedBy<Color, Game>', () => {
-  test('empty board', () => {
-    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
-
-    assertType<OccupiedBy<Game, 'b'>>([])
-    assertType<OccupiedBy<Game, 'w'>>([])
-  })
-
-  test('starting position', () => {
-    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
-
-    type Black = OccupiedBy<Game, 'b'>
-
-    type White = OccupiedBy<Game, 'w'>
-
-    assertType<Black>([
-      'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7'
-    ])
-
-    assertType<White>([
-      'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1'
-    ])
-  })
-
-  test('mid-game position', () => {
-    type Game = ParseFen<'2b3k1/6pp/4p3/2p5/4p3/4K3/P1P3PP/7R b - - 1 23'>
-
-    type Black = OccupiedBy<Game, 'b'>
-
-    type White = OccupiedBy<Game, 'w'>
-
-    assertType<Black>([
-      'c8', 'g8', 'g7', 'h7', 'e6', 'c5', 'e4'
-    ])
-
-    assertType<White>([
-      'e3', 'a2', 'c2', 'g2', 'h2', 'h1'
-    ])
-  })
-})
-
 describe('CurrentMovesUnsafe<Game>', () => {
   test('empty board', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
@@ -363,6 +323,40 @@ describe('IsCheck<Game, KingColor>', () => {
   })
 })
 
+describe('IsLegal<Game, San>', () => {
+  test('false from empty positions', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    type Result = IsLegal<Game, 'f5f6'>
+
+    assertType<Result>(false)
+  })
+
+  test('true for legal moves', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Result = IsLegal<Game, 'e2e4'>
+
+    assertType<Result>(true)
+  })
+
+  test('cannot self-check by moving pinned piece', () => {
+    type Game = ParseFen<'7b/8/8/8/3P4/8/8/K7 w - - 0 1'>
+
+    type Result = IsLegal<Game, 'd4d5'>
+
+    assertType<Result>(false)
+  })
+
+  test('cannot move king into check', () => {
+    type Game = ParseFen<'8/8/3k4/8/4P3/8/8/8 b - - 0 1'>
+
+    type Result = IsLegal<Game, 'd6d5'>
+
+    assertType<Result>(false)
+  })
+})
+
 describe('IsThreatened<Game, Color, Index>', () => {
   test('empty board', () => {
     type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
@@ -410,5 +404,46 @@ describe('IsThreatened<Game, Color, Index>', () => {
 
     assertType<ThreatenedByBlack>(true)
     assertType<ThreatenedByWhite>(true)
+  })
+})
+
+describe('OccupiedBy<Color, Game>', () => {
+  test('empty board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    assertType<OccupiedBy<Game, 'b'>>([])
+    assertType<OccupiedBy<Game, 'w'>>([])
+  })
+
+  test('starting position', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Black = OccupiedBy<Game, 'b'>
+
+    type White = OccupiedBy<Game, 'w'>
+
+    assertType<Black>([
+      'a8', 'b8', 'c8', 'd8', 'e8', 'f8', 'g8', 'h8', 'a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7'
+    ])
+
+    assertType<White>([
+      'a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2', 'a1', 'b1', 'c1', 'd1', 'e1', 'f1', 'g1', 'h1'
+    ])
+  })
+
+  test('mid-game position', () => {
+    type Game = ParseFen<'2b3k1/6pp/4p3/2p5/4p3/4K3/P1P3PP/7R b - - 1 23'>
+
+    type Black = OccupiedBy<Game, 'b'>
+
+    type White = OccupiedBy<Game, 'w'>
+
+    assertType<Black>([
+      'c8', 'g8', 'g7', 'h7', 'e6', 'c5', 'e4'
+    ])
+
+    assertType<White>([
+      'e3', 'a2', 'c2', 'g2', 'h2', 'h1'
+    ])
   })
 })
