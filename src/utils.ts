@@ -43,7 +43,7 @@ export type ToMoves<
   Acc extends unknown[] = []
 > = T extends [infer To extends Index, ...infer Tail extends Index[]]
   ? ToMoves<Tail, From, [...Acc, {
-    castle: null,
+    castle: false,
     from: From,
     to: To,
     promotion: ''

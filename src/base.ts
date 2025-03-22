@@ -65,7 +65,7 @@ export type ParsedGame = {
 
 /** Parsed move */
 export type ParsedMove = {
-  castle: 'K' | 'Q' | 'k' | 'q' | null
+  castle: 'K' | 'Q' | 'k' | 'q' | false
   from: Index
   to: Index
   promotion: PromotionPiece | ''
