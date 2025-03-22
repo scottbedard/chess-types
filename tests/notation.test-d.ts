@@ -106,6 +106,50 @@ describe('FormatSan<T>', () => {
 
     assertType<Result>('f5f6')
   })
+
+  test('O-O', () => {
+    type Result = FormatSan<{
+      castle: 'K',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('O-O')
+  })
+
+  test('O-O-O', () => {
+    type Result = FormatSan<{
+      castle: 'Q',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('O-O-O')
+  })
+
+  test('o-o', () => {
+    type Result = FormatSan<{
+      castle: 'k',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('o-o')
+  })
+
+  test('o-o-o', () => {
+    type Result = FormatSan<{
+      castle: 'q',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('o-o-o')
+  })
 })
 
 describe('ParseBoard<T>', () => {
