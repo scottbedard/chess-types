@@ -71,7 +71,15 @@ export type FormatCastling<
 /** format san */
 export type FormatSan<
   T extends ParsedMove,
-> = `${Positions[T['from']]}${Positions[T['to']]}${T['promotion']}`
+> = T['castle'] extends 'K'
+  ? 'O-O'
+  : T['castle'] extends 'Q'
+    ? 'O-O-O'
+    : T['castle'] extends 'k'
+      ? 'o-o'
+      : T['castle'] extends 'q'
+        ? 'o-o-o'
+        : `${Positions[T['from']]}${Positions[T['to']]}${T['promotion']}`
 
 /** Normalize fen board string to a 64 character string */
 export type ParseBoard<
@@ -152,7 +160,7 @@ export type ParseSans<
 /** format tuple of sans */
 export type ToSans<
   T extends ParsedMove[],
-  Acc extends `${Position}${Position}${PromotionPiece | ''}`[] = []
+  Acc extends string[] = []
 > = T extends [infer U extends ParsedMove, ...infer V extends ParsedMove[]]
   ? ToSans<V, [...Acc, FormatSan<U>]>
   : Acc

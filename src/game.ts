@@ -231,7 +231,7 @@ export type CurrentMovesUnsafe<
   Turn extends Color = Game['turn'],
   From extends Index[] = _OccupiedBy<Game, Turn>,
   Acc extends ParsedMove[] = []
-> = _CurrentMovesUnsafe<Game, Turn, From, Acc> extends infer M extends Move[]
+> = _CurrentMovesUnsafe<Game, Turn, From, Acc> extends infer M extends ParsedMove[]
   ? ToSans<M>
   : never
 
