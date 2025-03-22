@@ -1,10 +1,11 @@
 import { assertType, describe, test } from 'vitest'
 import type { FormatGame, ParseFen } from '@/notation'
-import type { Positions, PositionIndex } from '@/base'
+import type { Positions } from '@/base'
 
 import type {
   ApplyMoveUnsafe,
   Chessboard,
+  CurrentMoves,
   CurrentMovesUnsafe,
   FindKing,
   IsCheck,
@@ -226,6 +227,38 @@ describe('Chessboard', () => {
       7: ' p p p p p p p p ',
       8: ' r n b k q b n r ',
     })
+  })
+})
+
+describe('CurrentMoves<Game, Turn>', () => {
+  test('empty board', () => {
+    type Game = ParseFen<'8/8/8/8/8/8/8/8 w KQkq - 0 1'>
+
+    type White = CurrentMoves<Game>
+    type Black = CurrentMoves<Game, 'b'>
+
+    assertType<White>([])
+    assertType<Black>([])
+  })
+
+  test('starting position', () => {
+    type Game = ParseFen<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'>
+
+    type Result = CurrentMoves<Game>
+
+    assertType<Result>([
+      'a2a3', 'a2a4', 'b2b3', 'b2b4', 'c2c3', 'c2c4', 'd2d3', 'd2d4',
+      'e2e3', 'e2e4', 'f2f3', 'f2f4', 'g2g3', 'g2g4', 'h2h3', 'h2h4',
+      'b1a3', 'b1c3', 'g1f3', 'g1h3'
+    ])
+  })
+
+  test('must block check', () => {
+    type Game = ParseFen<'K6r/Q6r/8/8/8/8/8/8 w - - 0 1'>
+
+    type Result = CurrentMoves<Game>
+
+    assertType<Result>(['a7b8'])
   })
 })
 

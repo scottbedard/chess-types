@@ -187,6 +187,32 @@ export type _ReplaceAt<
 ]
 
 /**
+ * Get current legal moves
+ */
+export type CurrentMoves<
+  Game extends ParsedGame,
+  Turn extends Color = Game['turn'],
+> = ToSans<_CurrentMoves<Game, Turn>>
+
+type _CurrentMoves<
+  Game extends ParsedGame,
+  Turn extends Color = Game['turn'],
+> = _CurrentMovesUnsafe<Game, Turn> extends infer UnsafeMoves extends ParsedMove[]
+  ? _FilterIllegalMoves<Game, Turn, UnsafeMoves>
+  : []
+
+type _FilterIllegalMoves<
+  Game extends ParsedGame,
+  Turn extends Color,
+  Moves extends ParsedMove[],
+  Acc extends ParsedMove[] = []
+> = Moves extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
+  ? _IsLegal<Game, Head> extends true
+    ? _FilterIllegalMoves<Game, Turn, Tail, [...Acc, Head]>
+    : _FilterIllegalMoves<Game, Turn, Tail, Acc>
+  : Acc
+
+/**
  * Get all possible moves, even ones that result in self-check
  **/
 export type CurrentMovesUnsafe<
