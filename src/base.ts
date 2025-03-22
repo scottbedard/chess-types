@@ -65,6 +65,7 @@ export type ParsedGame = {
 
 /** Parsed move */
 export type ParsedMove = {
+  castle: 'K' | 'Q' | 'k' | 'q' | null
   from: Index
   to: Index
   promotion: PromotionPiece | ''
@@ -112,13 +113,6 @@ export type PositionIndex = {
   a3: 40, b3: 41, c3: 42, d3: 43, e3: 44, f3: 45, g3: 46, h3: 47,
   a2: 48, b2: 49, c2: 50, d2: 51, e2: 52, f2: 53, g2: 54, h2: 55,
   a1: 56, b1: 57, c1: 58, d1: 59, e1: 60, f1: 61, g1: 62, h1: 63,
-}
-
-/** Move notation */
-export type Move = {
-  from: Index
-  to: Index
-  promotion: 'q' | 'r' | 'b' | 'n' | 'Q' | 'R' | 'B' | 'N' | ''
 }
 
 /**

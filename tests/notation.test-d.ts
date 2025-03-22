@@ -87,6 +87,7 @@ describe('FormatGame<T>', () => {
 describe('FormatSan<T>', () => {
   test('a7a8Q', () => {
     type Result = FormatSan<{
+      castle: null,
       from: PositionIndex['a7'],
       to: PositionIndex['a8'],
       promotion: 'Q'
@@ -97,6 +98,7 @@ describe('FormatSan<T>', () => {
 
   test('f5f6', () => {
     type Result = FormatSan<{
+      castle: null,
       from: PositionIndex['f5'],
       to: PositionIndex['f6'],
       promotion: ''
@@ -245,6 +247,7 @@ describe('ParseSan<T>', () => {
     type Result = ParseSan<'e2e4'>
 
     assertType<Result>({
+      castle: null,
       from: 52,
       to: 36,
       promotion: '',
@@ -255,6 +258,7 @@ describe('ParseSan<T>', () => {
     type Result = ParseSan<'a7a8Q'>
 
     assertType<Result>({
+      castle: null,
       from: 8,
       to: 0,
       promotion: 'Q',

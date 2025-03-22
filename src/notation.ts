@@ -132,6 +132,7 @@ export type _ParseFen<T extends string> =
 export type ParseSan<T extends string> =
   T extends `${infer FromFile extends File}${infer FromRank extends Rank}${infer ToFile extends File}${infer ToRank extends Rank}${infer Promotion extends PromotionPiece | ''}`
     ? {
+      castle: null,
       from: PositionIndex[`${FromFile}${FromRank}`],
       to: PositionIndex[`${ToFile}${ToRank}`],
       promotion: Promotion extends PromotionPiece ? Promotion : ''
