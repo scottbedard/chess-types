@@ -13,7 +13,7 @@ Welcome to a strange TypeScript experiment, my goal is to play chess inside the 
 To get started, create a game and apply moves to it using a list of `{from}{to}` strings.
 
 ```ts
-type Game = NewGame[
+type Game = NewGame<[
   'e2e4', 'e7e5',
   'g1f3', 'b8c6',
   'f1c4', 'f8c5',
