@@ -11,6 +11,7 @@ import type {
   IsCheck,
   IsLegal,
   IsThreatened,
+  NewGame,
   OccupiedBy,
   Play,
 } from '@/game'
@@ -483,7 +484,15 @@ describe('OccupiedBy<Color, Game>', () => {
 })
 
 describe('Play<Game, Moves>', () => {
-  test('Italian game', () => {
+  test('NewGame<Moves>', () => {
+    type Result = NewGame<['e2e4']>
+
+    type Fen = FormatGame<Result>
+
+    assertType<Fen>('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1')
+  })
+
+  test('Italian game and', () => {
     type Result = Play<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [
       'e2e4', 'e7e5',
       'g1f3', 'b8c6',

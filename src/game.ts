@@ -454,6 +454,10 @@ export type _OccupiedBy<
 /**
  * Play a game
  */
+export type NewGame<
+  Moves extends string[] = []
+> = Play<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', Moves>
+
 export type Play<
   Game extends ParsedGame | string,
   Moves extends string[],
