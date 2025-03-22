@@ -7,7 +7,6 @@ import type {
   Index,
   Indices,
   MaybePiece,
-  Move,
   ParsedGame,
   ParsedMove,
   Piece,
@@ -231,8 +230,8 @@ export type CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
   From extends Index[] = _OccupiedBy<Game, Turn>,
-  Acc extends Move[] = []
-> = _CurrentMovesUnsafe<Game, Turn, From, Acc> extends infer M extends Move[]
+  Acc extends ParsedMove[] = []
+> = _CurrentMovesUnsafe<Game, Turn, From, Acc> extends infer M extends ParsedMove[]
   ? ToSans<M>
   : never
 
@@ -240,7 +239,7 @@ export type _CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
   From extends Index[] = _OccupiedBy<Game, Turn>,
-  Acc extends Move[] = []
+  Acc extends ParsedMove[] = []
 > = From extends [infer Head extends Index, ...infer Tail extends Index[]]
   ? Game['board'][Head] extends infer CurrentPiece extends Piece
     ? CurrentPiece extends 'p' | 'P' ? _CurrentMovesUnsafe<Game, Turn, Tail, [...Acc, ...PawnMoves<Game, PieceColor<CurrentPiece>, Head>]>
@@ -413,7 +412,7 @@ export type _IsThreatened<
   Acc extends Index[] = _OccupiedBy<Game, HostileColor>
 > = Acc extends [infer PositionHead extends Index, ...infer PositionTail extends Index[]]
   ? Game['board'][PositionHead] extends FriendlyPiece<HostileColor>
-    ? _CurrentMovesUnsafe<Game, HostileColor, [PositionHead]> extends infer PositionMoves extends Move[]
+    ? _CurrentMovesUnsafe<Game, HostileColor, [PositionHead]> extends infer PositionMoves extends ParsedMove[]
       ? _IsReachable<TargetIndex, PositionMoves> extends true
         ? true
         : _IsThreatened<Game, TargetIndex, HostileColor, PositionTail>
@@ -423,8 +422,8 @@ export type _IsThreatened<
 
 type _IsReachable<
   Target extends Index,
-  Moves extends Move[]
-> = Moves extends [infer Head extends Move, ...infer Tail extends Move[]]
+  Moves extends ParsedMove[]
+> = Moves extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
   ? Head['to'] extends Target
     ? true
     : _IsReachable<Target, Tail>

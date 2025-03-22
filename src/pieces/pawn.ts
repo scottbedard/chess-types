@@ -88,10 +88,10 @@ export type _ExpandPromotions<
   ? Head['to'] extends _PawnPromotionPositions
     ? _ExpandPromotions<Tail, U, [
       ...Acc,
-      { to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'Q' : 'q' },
-      { to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'R' : 'r' },
-      { to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'N' : 'n' },
-      { to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'B' : 'b' },
+      { castle: false, to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'Q' : 'q' },
+      { castle: false, to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'R' : 'r' },
+      { castle: false, to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'N' : 'n' },
+      { castle: false, to: Head['to'], from: Head['from'], promotion: U extends 'w' ? 'B' : 'b' },
     ]>
     : _ExpandPromotions<Tail, U, [...Acc, Head]>
   : Acc

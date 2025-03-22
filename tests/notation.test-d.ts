@@ -87,6 +87,7 @@ describe('FormatGame<T>', () => {
 describe('FormatSan<T>', () => {
   test('a7a8Q', () => {
     type Result = FormatSan<{
+      castle: false,
       from: PositionIndex['a7'],
       to: PositionIndex['a8'],
       promotion: 'Q'
@@ -97,12 +98,57 @@ describe('FormatSan<T>', () => {
 
   test('f5f6', () => {
     type Result = FormatSan<{
+      castle: false,
       from: PositionIndex['f5'],
       to: PositionIndex['f6'],
       promotion: ''
     }>
 
     assertType<Result>('f5f6')
+  })
+
+  test('O-O', () => {
+    type Result = FormatSan<{
+      castle: 'K',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('O-O')
+  })
+
+  test('O-O-O', () => {
+    type Result = FormatSan<{
+      castle: 'Q',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('O-O-O')
+  })
+
+  test('o-o', () => {
+    type Result = FormatSan<{
+      castle: 'k',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('o-o')
+  })
+
+  test('o-o-o', () => {
+    type Result = FormatSan<{
+      castle: 'q',
+      from: 0,
+      to: 0,
+      promotion: ''
+    }>
+
+    assertType<Result>('o-o-o')
   })
 })
 
@@ -245,6 +291,7 @@ describe('ParseSan<T>', () => {
     type Result = ParseSan<'e2e4'>
 
     assertType<Result>({
+      castle: false,
       from: 52,
       to: 36,
       promotion: '',
@@ -255,9 +302,54 @@ describe('ParseSan<T>', () => {
     type Result = ParseSan<'a7a8Q'>
 
     assertType<Result>({
+      castle: false,
       from: 8,
       to: 0,
       promotion: 'Q',
+    })
+  })
+
+  test('O-O', () => {
+    type Result = ParseSan<'O-O'>
+
+    assertType<Result>({
+      castle: 'K',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
+  test('O-O-O', () => {
+    type Result = ParseSan<'O-O-O'>
+
+    assertType<Result>({
+      castle: 'Q',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
+  test('o-o', () => {
+    type Result = ParseSan<'o-o'>
+
+    assertType<Result>({
+      castle: 'k',
+      from: 0,
+      to: 0,
+      promotion: '',
+    })
+  })
+
+  test('o-o-o', () => {
+    type Result = ParseSan<'o-o-o'>
+
+    assertType<Result>({
+      castle: 'q',
+      from: 0,
+      to: 0,
+      promotion: '',
     })
   })
 
