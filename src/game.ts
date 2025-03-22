@@ -206,16 +206,6 @@ export type _ReplaceAt<
 ]
 
 /**
- * Apply multiple moves, regardless of turn or legality
- */
-type _ApplyMovesUnsafe<
-  Game extends ParsedGame,
-  Moves extends ParsedMove[] = [],
-> = Moves extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
-  ? _ApplyMovesUnsafe<_ApplyMoveUnsafe<Game, Head>, Tail>
-  : Game
-
-/**
  * Get current legal moves
  */
 export type CurrentMoves<
@@ -253,7 +243,7 @@ export type CurrentMovesUnsafe<
   ? ToSans<M>
   : never
 
-export type _CurrentMovesUnsafe<
+type _CurrentMovesUnsafe<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
   From extends Index[] = _OccupiedBy<Game, Turn>,
@@ -321,7 +311,7 @@ export type FindKing<
   ? Positions[K]
   : false
 
-export type _FindKing<
+type _FindKing<
   Game extends ParsedGame,
   C extends Color,
   King extends Piece = C extends 'w' ? 'K' : 'k',
@@ -468,7 +458,7 @@ export type IsThreatened<
   Acc extends Index[] = _OccupiedBy<Game, HostileColor>
 > = _IsThreatened<Game, PositionIndex[Target], HostileColor, Acc>
 
-export type _IsThreatened<
+type _IsThreatened<
   Game extends ParsedGame,
   TargetIndex extends Index,
   HostileColor extends Color = EnemyColor<Game['turn']>,
@@ -502,7 +492,7 @@ export type OccupiedBy<
   Acc extends Index[] = []
 > = ToPositions<_OccupiedBy<Game, C, Remaining, Acc>>
 
-export type _OccupiedBy<
+type _OccupiedBy<
   Game extends ParsedGame,
   C extends Color,
   Remaining extends Index[] = Indices,
