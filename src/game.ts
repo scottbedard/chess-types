@@ -33,7 +33,6 @@ import type { KnightMoves } from './pieces/knight'
 import type { PawnMoves } from './pieces/pawn'
 import type { QueenMoves } from './pieces/queen'
 import type { RookMoves } from './pieces/rook'
-import { _ } from 'vitest/dist/chunks/reporters.d.CqBhtcTq'
 
 /**
  * Apply moves to a game, regardless of turn or legality
@@ -151,10 +150,18 @@ type _UpdateCastling<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = {
-  K: Move['castle'] extends 'K' ? false : Game['castling']['K'],
-  Q: Move['castle'] extends 'Q' ? false : Game['castling']['Q'],
-  k: Move['castle'] extends 'k' ? false : Game['castling']['k'],
-  q: Move['castle'] extends 'q' ? false : Game['castling']['q'],
+  K: Move['castle'] extends 'K' | 'Q'
+    ? false
+    : Game['castling']['K'],
+  Q: Move['castle'] extends 'K' | 'Q'
+    ? false
+    : Game['castling']['Q'],
+  k: Move['castle'] extends 'k' | 'q'
+    ? false
+    : Game['castling']['k'],
+  q: Move['castle'] extends 'k' | 'q'
+    ? false
+    : Game['castling']['q'],
 }
 
 type _UpdateEnPassant<

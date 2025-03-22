@@ -544,15 +544,16 @@ describe('Play<Game, Moves>', () => {
     assertType<Fen>('rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1')
   })
 
-  test('Italian game and', () => {
+  test('Giuoco piano', () => {
     type Result = Play<'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [
       'e2e4', 'e7e5',
       'g1f3', 'b8c6',
       'f1c4', 'f8c5',
+      'O-O',
     ]>
 
     type Fen = FormatGame<Result>
 
-    assertType<Fen>('r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4')
+    assertType<Fen>('r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4')
   })
 })
