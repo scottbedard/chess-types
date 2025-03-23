@@ -42,7 +42,7 @@ export type ApplyMoveUnsafe<
   San extends string
 > = _ApplyMoveUnsafe<Game, ParseSan<San>>
 
-type _ApplyMoveUnsafe<
+export type _ApplyMoveUnsafe<
   Game extends ParsedGame,
   Move extends ParsedMove,
 > = _ApplyMovePiece<Game, Move> extends infer P extends Piece
@@ -220,7 +220,7 @@ export type CurrentMoves<
   Turn extends Color = Game['turn'],
 > = ToSans<_CurrentMoves<Game, Turn>>
 
-type _CurrentMoves<
+export type _CurrentMoves<
   Game extends ParsedGame,
   Turn extends Color = Game['turn'],
 > = _CurrentMovesUnsafe<Game, Turn> extends infer UnsafeMoves extends ParsedMove[]
