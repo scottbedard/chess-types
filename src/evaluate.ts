@@ -1,5 +1,4 @@
 import type {
-  Color,
   Index,
   Indices,
   ParsedGame,
@@ -10,24 +9,30 @@ import type {
 import type {
   _ApplyMoveUnsafe,
   _CurrentMoves,
-  Chessboard,
-  NewGame
 } from './game'
 
-import type {
-  FormatGame,
+import {
   FormatSan,
-  ParseFen
 } from './notation'
 
-import type { Sum } from './utils'
+import type {
+  IsGreater,
+  Sum
+} from './utils'
 
 /**
  * Get the next move
  */
+export type NextMove<Game extends ParsedGame> = Game['turn'] extends 'w'
+  ? _Max<_Layer<Game>> extends infer Node extends _Node
+    ? FormatSan<Node['move']>
+    : never
+  : _Min<_Layer<Game>> extends infer Node extends _Node
+    ? FormatSan<Node['move']>
+    : never
+
 type _Node = {
-  move: string
-  fen: string
+  move: ParsedMove
   score: number
 }
 
@@ -37,17 +42,32 @@ type _Layer<
   Acc extends _Node[] = []
 > = Moves extends [infer Head extends ParsedMove, ...infer Tail extends ParsedMove[]]
   ? _Layer<Game, Tail, [...Acc, {
-    move: FormatSan<Head>,
-    fen: FormatGame<_ApplyMoveUnsafe<Game, Head>>
+    move: Head,
     score: Evaluate<_ApplyMoveUnsafe<Game, Head>>
   }]>
   : Acc
 
-type Game = ParseFen<'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq d6 0 2'>
+type _Max<
+  Nodes extends _Node[],
+  Best extends _Node | false = false
+> = Nodes extends [infer Head extends _Node, ...infer Tail extends _Node[]]
+  ? Best extends infer B extends _Node
+    ? IsGreater<Head['score'], B['score']> extends true
+      ? _Max<Tail, Head>
+      : _Max<Tail, Best>
+    : _Max<Tail, Head>
+  : Best
 
-type Foo = _Layer<Game>
-
-type Output = Chessboard<Game>
+type _Min<
+  Nodes extends _Node[],
+  Best extends _Node | false = false
+> = Nodes extends [infer Head extends _Node, ...infer Tail extends _Node[]]
+  ? Best extends infer B extends _Node
+    ? IsGreater<Head['score'], B['score']> extends true
+      ? _Min<Tail, Best>
+      : _Min<Tail, Head>
+    : _Min<Tail, Head>
+  : Best
 
 /**
  * Evaluate game state
@@ -61,11 +81,6 @@ export type Evaluate<
     ? Evaluate<Game, Sum<Value, _PieceValue[P]>, Tail>
     : Evaluate<Game, Value, Tail>
   : Value
-
-type _EvaluateMove<
-  Game extends ParsedGame,
-  Move extends ParsedMove,
-> = Evaluate<_ApplyMoveUnsafe<Game, Move>>
 
 type _PieceValue = {
   'k': -90
