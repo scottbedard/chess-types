@@ -2,6 +2,7 @@ import { assertType, test } from 'vitest'
 
 import type {
   Increment,
+  IsGreater,
   Sum,
 } from '@/utils'
 
@@ -13,6 +14,18 @@ test('Increment<T>', () => {
   type Result2 = Increment<Result>
 
   assertType<Result2>(2)
+})
+
+test('IsGreater<A, B>', () => {
+  type Test1 = IsGreater<-1, 1>
+  type Test2 = IsGreater<1, -1>
+  type Test3 = IsGreater<-3, -2>
+  type Test4 = IsGreater<-2, -3>
+
+  assertType<Test1>(false)
+  assertType<Test2>(true)
+  assertType<Test3>(false)
+  assertType<Test4>(true)
 })
 
 test('Sum<A, B>', () => {

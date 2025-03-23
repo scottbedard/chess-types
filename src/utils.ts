@@ -15,9 +15,37 @@ export type Abs<T extends number> = `${T}` extends `-${string}`
  * Fill array to a certain size
  */
 type Fill<
-  T,
-  Arr extends unknown[] = []
-> = Arr['length'] extends T ? Arr : Fill<T, [...Arr, unknown]>
+  T extends number,
+  Arr extends number[] = []
+> = Arr['length'] extends T ? Arr : Fill<T, [...Arr, 1]>
+
+/**
+ * Test if integer `A` is greater than `B`
+ */
+export type IsGreater<
+  A extends number,
+  B extends number,
+> = [IsNegative<A>, IsNegative<B>] extends [infer NegA extends boolean, infer NegB extends boolean]
+  // both values are negative
+  ? [NegA, NegB] extends [true, true]
+    ? [Abs<A>, Abs<B>] extends [infer AbsA extends number, infer AbsB extends number]
+      ? IsGreater<AbsB, AbsA>
+      : never
+    // only the right side is negative
+    : [NegA, NegB] extends [false, true]
+      ? true
+      // only the left side is negative
+      : [NegA, NegB] extends [true, false]
+        ? false
+        // both values are positive
+        : [NegA, NegB] extends [false, false]
+          ? _Balance<A, B> extends [infer BalA extends number, number]
+            ? BalA extends 0
+              ? false
+              : true
+            : never
+          : never
+  : never
 
 /** Test if string `T` includes string `U` */
 export type Includes<T extends string, U extends string> =
@@ -26,10 +54,10 @@ export type Includes<T extends string, U extends string> =
     : false
 
 /** Increment number `T` */
-export type Increment<T extends number, Acc extends unknown[] = []> =
+export type Increment<T extends number, Acc extends 1[] = []> =
   Acc['length'] extends T
-    ? [...Acc, unknown]['length']
-    : Increment<T, [...Acc, unknown]>
+    ? [...Acc, 1]['length']
+    : Increment<T, [...Acc, 1]>
 
 /** Convert positive string integer `T` to `number` */
 export type Int<T extends string> =
@@ -107,21 +135,21 @@ export type Sum<
     : _Sum<A, B>
   : never
 
-/** Iterate A and B towards 0, stop when either of them reach it */
-type _Balance<
-  A extends number,
-  B extends number,
-  SetA extends unknown[] = Fill<Abs<A>>,
-  SetB extends unknown[] = Fill<Abs<B>>,
-> = SetA['length'] extends SetB['length']
-  ? [0, 0]
-  : SetA extends [unknown, ...infer TailA]
-    ? SetB extends [unknown, ...infer TailB]
-      ? _Balance<A, B, TailA, TailB>
-      : [SetA['length'], 0] // Set B ran out first
-    : [0, SetB['length']] // set A ran our first
-
 export type _Sum<
   A extends number,
   B extends number,
 > = [...Fill<A>, ...Fill<B>]['length'] extends infer U extends number ? U : never
+
+/** Iterate A and B towards 0, stop when either of them reach it */
+type _Balance<
+  A extends number,
+  B extends number,
+  SetA extends 1[] = Fill<Abs<A>>,
+  SetB extends 1[] = Fill<Abs<B>>,
+> = SetA['length'] extends SetB['length']
+  ? [0, 0]
+  : SetA extends [1, ...infer TailA extends 1[]]
+    ? SetB extends [1, ...infer TailB extends 1[]]
+      ? _Balance<A, B, TailA, TailB>
+      : [SetA['length'], 0] // Set B ran out first
+    : [0, SetB['length']] // set A ran our first
