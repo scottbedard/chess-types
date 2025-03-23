@@ -10,13 +10,14 @@ Welcome to a strange TypeScript experiment, my goal is to play chess inside the 
 
 ## Basic usage
 
-To get started, create a game and apply moves to it using a list of `{from}{to}` strings.
+Create a game and apply moves using `{from}{to}{promotion?}` strings. Castling is done via `O-O` and `O-O-O` syntax, lower case for black.
 
 ```ts
 import type {
   Chessboard,
   FormatGame,
   NewGame,
+  NextMove,
 } from '@bedard/chess-types'
 
 type Game = NewGame<[
@@ -26,7 +27,9 @@ type Game = NewGame<[
   'O-O',  // ...
 ]>
 
-type Board = Chessboard<Game>
+type CpuMove = NextMove<Game> // <- then play against the compiler!
+
+type Board = Chessboard<Game> // <- hover to see the current board state
 
 // {
 //     8: " r * b q k * n r ";
@@ -39,9 +42,10 @@ type Board = Chessboard<Game>
 //     1: " R N B Q * R K - ";
 // }
 
-type Fen = FormatGame<Game>
+// and finally, export the game as a string using FEN notation
 
-// 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4'
+type Fen = FormatGame<Game> // 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4'
+
 ```
 
 There are many of other types available under the hood, more docs to come.
