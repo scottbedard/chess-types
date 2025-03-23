@@ -4,13 +4,13 @@
 [![NPM](https://img.shields.io/npm/v/%40bedard%2Fchess-types)](https://www.npmjs.com/package/@bedard/chess-types)
 [![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/scottbedard/chess-types/blob/main/LICENSE)
 
-Welcome to a strange TypeScript experiment, my goal is to play chess inside the type system.
+Welcome to a strange experiment to play chess inside TypeScript's type system.
 
-[Check out the sandbox &rarr;](https://www.typescriptlang.org/play/?noErrorTruncation=true#code/PQKhCgAIUgBAjApgEwIYCdnAMYAtEDOBAtAC4CeADoVDLZLqaZQQFzDADmAlqbgK7wAdNgD2AW2AExTJGkw58RMlRrRg4cN3GVR6UpArVIAbyiQAwkoLxRGZABpzAMT3jUpAOKpxiJ5EgAOUQAd29fJwBfSAAzdAlIAHIEFHtFQhIjQkTNLMhwxEgAXiDQgoAeAG1zRMQAJkQAFkSHJMQAdkQAVhaazgBGGIBmFqT4AA5sADZegMSY-uxm1vnJnv8kgHliTdHIDkghI-AAXQA+XNVIACE7TGLLa1t7coKL8AOzA4CA8dZIABEkHQ0Eg8EgAEdIABrUEAO2BgIA3B9gD8Au1-kDKJAcXjQficQCUd8flMsZBiPDQVSYLTkaj0ZAuhS6WDKbiOWziYz0Y0KfTrqCAAo00E80kBIasrmywJiiVo9F1CmitWQUVU9WixVM-oUgBKQRukAAiqCjQBpDm6yKXYzORAIkqudDuLw+RCvT3vA6JdD9eAQ6H9OHoYCUSOUfpR4B1OFdOPwGNDOPXfrC1NdQJ1YDC-PCjP54AGwLXU39A2W-rs6FQqldSDNcBAA)
+[Check out the sandbox &rarr;](https://www.typescriptlang.org/play/?noErrorTruncation=true#code/JYWwDg9gTgLgBDAnmApnA3gKDnAwgCxQGciAjCAQygBMAabOAMWhApgHEKQV6cA5FAHdO3XnAEAPGAFkIANx6YAvnABmUCCDgByAAKkU1KtQD0AY0IkAtElRFtmTLbQi0AXnFDXAHgDaDbRQAJhQAFm1aHRQAdhQAVgiAgHMARlUAZgidUgAOMwA2RJxtVRSzcMiSvISxbQB5KzqsuBMTOAA6TswAXQA+R2c8MABXWQU4D0kZeRRvV16Wtu8rODAAGwpEOAokimAAOyJ4GEI4M00wYDWUKABCAeQ0ACFKGgm8SzJX6jmuFAXWnBlnB8DMoAgIHAiCg0Cc0GZhlAoCh9vByMYoTA2ChHICsICcDgcgAuOAAIjg4IAVHBSHAAI5wADWcBp+0p5IA3JgCYToqSKWBVsKhTSheKuTy2oS4PkBXAVmzWQrlYrJbycHF5TSVnSVkK1SsydyNXBQvK1U9lQAFVXK41SmVwdLalU65V8O0O01BeW2-1wW0rAO273SwkpeUAJXEcCtAEVlTGANIqsNwJS4tqqA4UNZrRCRFASSCwBCnXbcbZEbaYqAHJJwYZEBtMACinv2ECxMGAEH2D1QTBR72YUFYHD+v24ALa2igKVI9KZKX2UBMYE3YBSW5MQX2cT3pB36T3TxS1tPcT4QRM1vv1ov95MUb4T3jKSjyZStOZjJWcRmg4QA)
 
 ## Basic usage
 
-Create a game and apply moves using `{from}{to}{promotion?}` strings. Castling is done via `O-O` and `O-O-O` syntax, lower case for black.
+Create a game and apply moves using `{from}{to}{promotion?}` strings. Castling is done via `O-O` and `O-O-O` syntax, lowercase for black.
 
 ```ts
 import type {
@@ -27,7 +27,7 @@ type Game = NewGame<[
   'O-O',  // ...
 ]>
 
-type CpuMove = NextMove<Game> // <- then play against the compiler!
+type CpuMove = NextMove<Game> // <- play against the compiler!
 
 type Board = Chessboard<Game> // <- hover to see the current board state
 
@@ -42,13 +42,27 @@ type Board = Chessboard<Game> // <- hover to see the current board state
 //     1: " R N B Q * R K - ";
 // }
 
-// and finally, export the game as a string using FEN notation
+// finally, export the game as a string using FEN notation
 
 type Fen = FormatGame<Game> // 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4'
-
 ```
 
-There are many of other types available under the hood, more docs to come.
+There are loads of other interesting types under the hood, like [`IsLegal`](https://github.com/scottbedard/chess-types/blob/a341df357eae5b2f7f293ddaf4335778ee357258/src/game.ts#L350-L421), [`ParseFen`](https://github.com/scottbedard/chess-types/blob/a341df357eae5b2f7f293ddaf4335778ee357258/src/notation.ts#L121-L137), and [`Evaluate`](https://github.com/scottbedard/chess-types/blob/a341df357eae5b2f7f293ddaf4335778ee357258/src/evaluate.ts#L75-L83). So if you're into that kind of thing, by all means dig around and let me know what you think!
+
+Side note, `NextMove` uses an extremely naive strategy. It simply adds up all the pieces and chooses the move with the best score. There are many improvements that could be made, but that was never the plan here. My goal was to play chess inside the compiler, not to build stockfish.
+
+## Final thoughts
+
+TypeScript is amazing.
+
+It's type system can be thought of as it's own purely functional language, but for obvious reasons it shouldn't be used as one. There was no practical reason for any of this beyond learning, but in that sense I've enjoyed it and feel like I've succeeded. More specifically, I've gained a new appreciation for the recursive accumulator pattern, and generic type inference.
+
+If you find this repo interesting, here are some others you may like!
+
+- [`Type<Challenge[]>`](https://github.com/type-challenges/type-challenges)
+- [`typescript-types-only-wasm-runtime`](https://github.com/MichiganTypeScript/typescript-types-only-wasm-runtime)
+- [`RuyiLi/cursed-typescript`](https://github.com/RuyiLi/cursed-typescript)
+- [`susisu/typefuck`](https://github.com/susisu/typefuck)
 
 ## License
 
